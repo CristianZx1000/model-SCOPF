@@ -1,3 +1,47 @@
+cup= 0.15
+cdn = 0.15
+
+cto1 = 50 # 50
+cto2 = 19.9 # 19.9
+llf23 = 30 # min 23 que provoca R_up
+llf13 = 100
+llf12 = 100
+load_m = 50/50
+Carga_m = 50 * load_m
+
+p_fore = 50
+alfa = 0.1
+
+agc_u = 0
+#########################################################
+import numpy as np
+
+usar_semilla = True
+
+rng = np.random.default_rng(42 if usar_semilla else None)
+
+valores = np.round(rng.uniform(-1, 1, 5), 2)
+#print(valores, sum(valores))
+
+#########################################################
+import numpy as np
+from scipy.stats import truncnorm
+
+rng = np.random.default_rng(42)
+
+# Normal truncada en [-3, 3]
+a, b = -3, 3
+
+u = truncnorm.rvs(a, b, loc=0, scale=1, size=5, random_state=rng)
+
+# Normalizar a [-1,1]
+numeros = u / 3 # u_norm
+
+print(np.round(numeros, 2))
+print("Media:", round(np.mean(numeros),5), "Std (poblacional):", 
+      round(np.std(numeros),5), "Std (muestral):", round(np.std(numeros, ddof=1),5))
+# numeros = round(np.mean(numeros),5)
+
 from IPython import get_ipython
 
 # Limpiar la consola
@@ -9,7 +53,6 @@ import warnings
 
 warnings.filterwarnings("ignore", category = DeprecationWarning)
 
-import sys
 from gurobipy import *
 from scipy.sparse import csr_matrix as sparse
 from numpy import pi, array, ones, zeros, arange, ix_, r_, flatnonzero as finddiag, dot as mult
@@ -54,7 +97,7 @@ sep['gencost'][0,5] = cto1
 sep['gencost'][2,5] = cto2
 
 # Límite reservas
-RUp = RDn = Pmax - Pmin    # límites Min./Max.
+RUp = RDn = Pmax - Pmin    # límites mín./máx.
 
 # Cto. reservas
 Cto_up = np.array([1, cup, 0.7])
@@ -108,7 +151,7 @@ eta_list = np.array([1]) * zeta #+ epsilon_list # parte estocástica
 e = 1  # generador renovable
 eta_vector = np.zeros(ng)
 
-RUp[e] = RDn[e] = p_VUL - Pmin[e]
+RUp[e] = RDn[e] = p_VUL - Pmin[e] #?
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -127,14 +170,14 @@ if agc_u == 1:
     u_dn=m.addMVar(ng, vtype=GRB.BINARY, name='u_dn')
 
 # Variables de segunda etapa
-# Pre - contingencia
+# Precontingencia
 p_pre=m.addMVar((ng, n_w), vtype=GRB.CONTINUOUS, lb=0, name='Pg_pre') #lb lim inf p>=0
 d_pre=m.addMVar((nb, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name='d_pre')
 f_pre=m.addMVar((nl, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name='f_pre')
 p_ens_pre=m.addMVar((nb, n_w), vtype=GRB.CONTINUOUS, lb=0, name='p_ens_pre')
 m.addConstrs((p_ens_pre[i, w] == 0 for i in range(nb-1) for w in range(n_w)))
 
-# Post - contingencia
+# Postcontingencia
 p_post=m.addMVar((ng, K, n_w), vtype=GRB.CONTINUOUS, lb=0, name='Pg_post') 
 d_post=m.addMVar((nb, K, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name='d_post')
 f_post=m.addMVar((nl, K, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name='f_post')
@@ -185,7 +228,7 @@ for w in range(n_w):
     f_pre_w = f_pre[:, w]
 
     #####################################################################################################################################
-    # ==== Pre - contingencia ====
+    # ==== Precontingencia ====
 
     # Barra SL
     m.addConstr(d_pre[SL] == 0, f'SL_pre_w{w}')
@@ -214,13 +257,14 @@ for w in range(n_w):
     m.addConstr(-p_ens_pre_w >= -Pmax_ens, name= f'P_max_ens_pre_w{w}')
 
     #####################################################################################################################################
-    # ==== Post - contingencia ====
+    # ==== Postcontingencia ====
 
     for k_idx,(tipo,index) in enumerate(contingencias):
         p_post_k     = p_post[:, k_idx, w]
         d_post_k     = d_post[:, k_idx, w]
         p_ens_post_k = p_ens_post[:, k_idx, w]
         f_post_k = f_post[:, k_idx, w]
+        eta_vector_post = eta_vector.copy()
 
         # N-1 cargas
         if tipo == 'load':
@@ -229,6 +273,12 @@ for w in range(n_w):
             Load_bus_post_k = Load_bus_pre.copy() * vc # carga post
         
         # N-1 gen.
+        elif tipo == 'gen':
+            # Anular el componente estocástico para el generador fuera de servicio
+            Load_bus_post_k = Load_bus_pre.copy()
+            eta_vector_post[index-1] = 0
+        
+        # N-1 líneas
         else:
             Load_bus_post_k = Load_bus_pre.copy()
 
@@ -236,7 +286,7 @@ for w in range(n_w):
         m.addConstr(d_post_k[SL] == 0, f'SL_post[{k_idx}]_w{w}')
 
         # Balance (LCK)
-        m.addConstr(Cg @ p_post_k + Cg @ eta_vector + p_ens_post_k - Load_bus_post_k == A.T @ f_post_k, name = f'LCK_post[{k_idx}]_w{w}')
+        m.addConstr(Cg @ p_post_k + Cg @ eta_vector_post + p_ens_post_k - Load_bus_post_k == A.T @ f_post_k, name = f'LCK_post[{k_idx}]_w{w}')
 
         # Límite líneas
         if tipo == 'line':
@@ -264,8 +314,8 @@ for w in range(n_w):
             for h in range(ng):
                 if h != index-1:   # todos excepto el fuera de servicio
                     # P_max y P_min
-                    m.addConstr(p_post_k[h] + eta_vector[h] >= Pmin[h], name=f'Pmin_post[{k_idx},{h}]_w{w}')
-                    m.addConstr(-p_post_k[h] - eta_vector[h] >= -Pmax[h], name=f'Pmax_post[{k_idx},{h}]_w{w}')
+                    m.addConstr(p_post_k[h] + eta_vector_post[h] >= Pmin[h], name=f'Pmin_post[{k_idx},{h}]_w{w}')
+                    m.addConstr(-p_post_k[h] - eta_vector_post[h] >= -Pmax[h], name=f'Pmax_post[{k_idx},{h}]_w{w}')
                     # Limite p_VUL para generador renovable
                     if h == e:
                         m.addConstr(-p_post_k[h] >= -p_VUL, name=f'p_VUL_post[{k_idx},{h}]_w{w}')
@@ -275,8 +325,8 @@ for w in range(n_w):
                     m.addConstr(-p_pre_w[h] + r_dn[h] >= -p_post_k[h], name=f'Dn[{k_idx},{h}]_w{w}')
         else:
             # P_max y P_min
-            m.addConstr(p_post_k + eta_vector >= Pmin, name = f'P_min_post[{k_idx}]_w{w}')
-            m.addConstr(-p_post_k - eta_vector >= -Pmax, name= f'P_max_post[{k_idx}]_w{w}')
+            m.addConstr(p_post_k + eta_vector_post >= Pmin, name = f'P_min_post[{k_idx}]_w{w}')
+            m.addConstr(-p_post_k - eta_vector_post >= -Pmax, name= f'P_max_post[{k_idx}]_w{w}')
             
             # Limite p_VUL para generador renovable
             m.addConstr(-p_post_k[e] >= -p_VUL, name= f'p_vul_post[{k_idx}]_w{w}')
