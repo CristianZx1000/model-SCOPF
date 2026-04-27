@@ -35,7 +35,7 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
         for h in range(ng):
             datos_pre.append({
                 "Generador": h+1,
-                "Potencia Pre (MW)": round(p_pre.X[h, w_idx], 3),
+                "Potencia pre (MW)": round(p_pre.X[h, w_idx], 3),
                 "Reserva Up (MW)": round(r_up.X[h], 3),
                 "Reserva Dn (MW)": round(r_dn.X[h], 3)
             })
@@ -85,28 +85,56 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                         nombre_col = f"Cont{c+1}: {tipo}{idx}"
                     fila_ens[nombre_col] = valores_post[c] #round(p_ens_post.X[b, c, w_idx], 3)
             
-            datos_ens.append(fila_ens)
+                datos_ens.append(fila_ens)
             
         tabla_ens = pd.DataFrame(datos_ens)
         
         # ----------------------------------------
         # 4. Tabla flujos (pre + post)
         # ----------------------------------------
-        datos_flujos = {
-            "Linea": [f"{int(sep['branch'][l,0])}-{int(sep['branch'][l,1])}" for l in range(nl)],
-            "Flujo Pre (MW)": [round(f_pre.X[l, w_idx], 3) for l in range(nl)]
+        # datos_flujos = {
+        #     "Línea\ contingencia": [f"{int(sep['branch'][l,0])}-{int(sep['branch'][l,1])}" for l in range(nl)],
+        #     "Flujo pre (MW)": [round(f_pre.X[l, w_idx], 3) for l in range(nl)]
+        # }
+        # for c in range(K):
+        #     tipo, idx = contingencias[c]
+        #     #nombre_col = f"k{c+1}: {tipo}{idx}"
+        #     if tipo == "gen":
+        #         nombre_col = f"Cont{c+1}: gen. {idx}"
+        #     elif tipo == "line":
+        #         nombre_col = f"Cont{c+1}: línea {int(sep['branch'][idx-1,0])}-{int(sep['branch'][idx-1,1])}"
+        #     else:
+        #         nombre_col = f"Cont{c+1}: {tipo}{idx}"
+        #     datos_flujos[nombre_col] = [round(f_post.X[l, c, w_idx], 3) for l in range(nl)]
+        # tabla_flujos = pd.DataFrame(datos_flujos)
+        
+        # ----------------------------------------
+        # 4. Tabla flujos precontingencia
+        # ----------------------------------------
+        datos_flujos_pre = {
+            "Línea": [f"{int(sep['branch'][l,0])}-{int(sep['branch'][l,1])}" for l in range(nl)],
+            "Flujo pre (MW)": [round(f_pre.X[l, w_idx], 3) for l in range(nl)]
+        }
+        tabla_flujos_pre = pd.DataFrame(datos_flujos_pre)
+
+        # ----------------------------------------
+        # 5. Tabla flujos POST-contingencia
+        # ----------------------------------------
+        datos_flujos_post = {
+            "Línea \ contingencia": [f"{int(sep['branch'][l,0])}-{int(sep['branch'][l,1])}" for l in range(nl)]
         }
         for c in range(K):
             tipo, idx = contingencias[c]
-            #nombre_col = f"k{c+1}: {tipo}{idx}"
             if tipo == "gen":
                 nombre_col = f"Cont{c+1}: gen. {idx}"
             elif tipo == "line":
                 nombre_col = f"Cont{c+1}: línea {int(sep['branch'][idx-1,0])}-{int(sep['branch'][idx-1,1])}"
             else:
                 nombre_col = f"Cont{c+1}: {tipo}{idx}"
-            datos_flujos[nombre_col] = [round(f_post.X[l, c, w_idx], 3) for l in range(nl)]
-        tabla_flujos = pd.DataFrame(datos_flujos)
+            
+            datos_flujos_post[nombre_col] = [round(f_post.X[l, c, w_idx], 3) for l in range(nl)]
+            
+        tabla_flujos_post = pd.DataFrame(datos_flujos_post)
         
         # ----------------------------------------
         # Escribir las tablas en la hoja
@@ -115,20 +143,26 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
         
         # 1. Generación pre
         tabla_pre.to_excel(writer, sheet_name=nombre_hoja, index=False, startrow=fila_actual)
-        fila_actual += len(tabla_pre) + 3
+        fila_actual += len(tabla_pre) + 2
         
         # 2. Generación post
         tabla_post.to_excel(writer, sheet_name=nombre_hoja, index=False, startrow=fila_actual)
-        fila_actual += len(tabla_post) + 3
+        fila_actual += len(tabla_post) + 2
         
         # 3. ENS
-        
         if not tabla_ens.empty:
             tabla_ens.to_excel(writer, sheet_name=nombre_hoja, index=False, startrow=fila_actual)
-            fila_actual += len(tabla_ens) + 3
+            fila_actual += len(tabla_ens) + 2
         
         # 4. Flujos (pre + post)
-        tabla_flujos.to_excel(writer, sheet_name=nombre_hoja, index=False, startrow=fila_actual)
+        #tabla_flujos.to_excel(writer, sheet_name=nombre_hoja, index=False, startrow=fila_actual)
+
+        # 4. Flujos pre
+        tabla_flujos_pre.to_excel(writer, sheet_name=nombre_hoja, index=False, startrow=fila_actual)
+        fila_actual += len(tabla_flujos_pre) + 2
+
+        # 5. Flujos post
+        tabla_flujos_post.to_excel(writer, sheet_name=nombre_hoja, index=False, startrow=fila_actual)
 
 # ==== Agregar resumen de costos y formato ====
 wb = load_workbook(nombre_archivo)
@@ -147,10 +181,8 @@ for w_idx in range(n_w):
         for k in range(K)
     )
     
-    # Calcular fila resumen dinámicamente
-    # Filas = (tabla_pre+header+gap) + (tabla_post+header+gap) + (tabla_ens+header+gap) + (tabla_flujos+header+gap)
-    fila_resumen = (len(tabla_pre) + 1 + 2) + (len(tabla_post) + 1 + 2) + \
-                   (len(tabla_ens) + 1 + 2) + (len(tabla_flujos) + 1 + 3)
+    # Calcular fila resumen automáticamente buscando la última fila con datos
+    fila_resumen = ws.max_row + 2
     
     # Agregar información del escenario
     ws.cell(row=fila_resumen, column=1, value=f"Escenario: eta = {eta_val:.3f} MW, error = {epsilon_list[w_idx]:.3f} MW")
@@ -159,17 +191,17 @@ for w_idx in range(n_w):
     fila_resumen += 3
     
     # Agregar resumen de costos
-    ws.cell(row=fila_resumen, column=1, value="Resumen de Costos ($/h)")
-    ws.cell(row=fila_resumen + 1, column=1, value="Costo Total del Sistema")
+    ws.cell(row=fila_resumen, column=1, value="Resumen de costos ($/h)")
+    ws.cell(row=fila_resumen + 1, column=1, value="Costo total del sistema")
     ws.cell(row=fila_resumen + 1, column=2, value=round(m.objVal, 3))
     
-    ws.cell(row=fila_resumen + 2, column=1, value=f"Costo Pre-Contingencia (escenario w={w_idx+1})")
+    ws.cell(row=fila_resumen + 2, column=1, value=f"Costo precontingencia (escenario w={w_idx+1})")
     ws.cell(row=fila_resumen + 2, column=2, value=round(Cop_pre_w, 3))
     
-    ws.cell(row=fila_resumen + 3, column=1, value="Costo de Reserva (total)")
+    ws.cell(row=fila_resumen + 3, column=1, value="Costo de reserva (total)")
     ws.cell(row=fila_resumen + 3, column=2, value=round(C_res_val, 3))
     
-    ws.cell(row=fila_resumen + 4, column=1, value=f"Costo Post-Contingencia (escenario w={w_idx+1})")
+    ws.cell(row=fila_resumen + 4, column=1, value=f"Costo postcontingencia (escenario w={w_idx+1})")
     ws.cell(row=fila_resumen + 4, column=2, value=round(Cop_post_w, 3))
     
     # --- Ajustar ancho de columnas ---
