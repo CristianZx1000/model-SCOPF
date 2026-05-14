@@ -1,8 +1,13 @@
+if not status == GRB.Status.OPTIMAL:
+    ejecutar = False
+    assert ejecutar, "Ejecución detenida por condición"
+
 import pandas as pd
 from openpyxl import load_workbook
 import numpy as np
+import os
 
-nombre_archivo = "resultados_SM_PA_v7_SF_estocastico.xlsx"
+nombre_archivo = "resultados_SM_PA_v7_estocastico.xlsx"
 
 # 1. Preparar DataFrame de reservas globales
 datos_reservas = []
@@ -14,7 +19,6 @@ for name in gen_agc:
         "Reserva Up (MW)": round(float(r_up_g.X[i]), 3),
         "Reserva Dn (MW)": round(float(r_dn_g.X[i]), 3)
     })
-
 df_reservas = pd.DataFrame(datos_reservas)
 
 # ExcelWriter
@@ -65,7 +69,7 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
         # --- ESCRIBIR ENCABEZADOS Y RESERVAS ---
         fila_actual = 0
         
-        # Título del Caso
+        # Título del caso
         pd.DataFrame([f"Resultados {nombre_hoja}"]).to_excel(
             writer, sheet_name=nombre_hoja, startrow=fila_actual, 
             startcol=0, index=False, header=False
@@ -96,7 +100,7 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
             
             # Encabezado escenario incertidumbre
             header_w = f"Escenario {w+1} (incertidumbre: {epsilon_val:.3f} MW | eta: {eta_val:.3f} MW)"
-            # header_w = f"Escenario de incertidumbre {w+1} (Pronóstico: {p_fore_val:.2f} MW | p_VUL: {p_VUL_val:.2f} MW)"
+            # header_w = f"Escenario de incertidumbre {w+1} (Pronóstico: {p_fore:.2f} MW | p_VUL: {p_VUL:.2f} MW)"
             pd.DataFrame([header_w]).to_excel(
                 writer, sheet_name=nombre_hoja, startrow=fila_actual, 
                 startcol=0, index=False, header=False
@@ -119,7 +123,7 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                 "Potencia pre (MW)": round(float(ploss_pre.X[:, w].sum()), 3)
             })
             
-            # ENS Precontingencia
+            # ENS precontingencia
             if p_ens_pre is not None:
                 ens_pre_total = sum(p_ens_pre.X[b, w] for b in range(nb))
                 datos_pre.append({
@@ -164,7 +168,7 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
             
             df_post_w = pd.DataFrame(datos_post_dict)
             
-            # Fila de Pérdidas
+            # Fila de pérdidas
             fila_ploss = {"Generador\ contingencia": "Pérdidas (MW)"}
             for c in range(K):
                 tipo, idx = contingencias[c]
@@ -180,7 +184,7 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                         nombre_col = f"Cont{c+1}: alm. ENAP"
                 fila_ploss[nombre_col] = round(float(ploss_post.X[:, c, w].sum()), 3)
             
-            # Fila ENS Total
+            # Fila ENS total
             if p_ens_post is not None:
                 fila_ens = {"Generador\ contingencia": "ENS total (MW)"}
                 for c in range(K):
@@ -198,7 +202,7 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                     ens_total = p_ens_post.X[:, c, w].sum()
                     fila_ens[nombre_col] = round(float(ens_total), 3)
             
-            # Fila de Carga
+            # Fila de carga
             fila_carga = {"Generador\ contingencia": "Carga total (MW)"}
             for c in range(K):
                 tipo, idx = contingencias[c]
@@ -301,21 +305,79 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                     startcol=0, index=False, header=False
                 )
                 
-                datos_flujo_pre = []
+                # Obtener índices de líneas y trafos desde network
+                line_indices = network["line_indices"]
+                
+                # Identificar qué branches son líneas y cuáles trafos
+                lineas_idx = []
+                trafos_idx = []
+                
                 for l in range(nl):
                     bus_from = int(branch_from[l])
                     bus_to = int(branch_to[l])
-                    flujo = round(float(f_pre.X[l, w]), 3)
                     
+                    # Buscar si es trafo o línea
+                    es_trafo = False
+                    for key, info in line_indices.items():
+                        if info["fbus"] == bus_from and info["tbus"] == bus_to:
+                            if "trafo" in key.lower():
+                                es_trafo = True
+                            break
+                    
+                    if es_trafo:
+                        trafos_idx.append(l)
+                    else:
+                        lineas_idx.append(l)
+                
+                # Construir datos: primero líneas, luego trafos
+                datos_flujo_pre = []
+                
+                # LÍNEAS
+                if lineas_idx:
                     datos_flujo_pre.append({
-                        'Línea': f'{bus_from}-{bus_to}',
-                        'Flujos pre (MW)': flujo
+                        'Branch': 'LÍNEAS',
+                        'Flujo (MW)': '',
+                        'Cargabilidad (%)': ''
                     })
+                    
+                    for l in lineas_idx:
+                        bus_from = int(branch_from[l])
+                        bus_to = int(branch_to[l])
+                        flujo = round(float(f_pre.X[l, w]), 3)
+                        fm = float(vars_case['FM'][l])
+                        cargabilidad = round(abs(flujo) / fm * 100, 2) if fm > 0 else 0
+                        
+                        datos_flujo_pre.append({
+                            'Branch': f'{bus_from}-{bus_to}',
+                            'Flujo (MW)': flujo,
+                            'Cargabilidad (%)': cargabilidad
+                        })
+                
+                # TRANSFORMADORES
+                if trafos_idx:
+                    datos_flujo_pre.append({
+                        'Branch': 'TRANSFORMADORES',
+                        'Flujo (MW)': '',
+                        'Cargabilidad (%)': ''
+                    })
+                    
+                    for l in trafos_idx:
+                        bus_from = int(branch_from[l])
+                        bus_to = int(branch_to[l])
+                        flujo = round(float(f_pre.X[l, w]), 3)
+                        fm = float(vars_case['FM'][l])
+                        cargabilidad = round(abs(flujo) / fm * 100, 2) if fm > 0 else 0
+                        
+                        datos_flujo_pre.append({
+                            'Branch': f'{bus_from}-{bus_to}',
+                            'Flujo (MW)': flujo,
+                            'Cargabilidad (%)': cargabilidad
+                        })
                 
                 df_flujo_pre_w = pd.DataFrame(datos_flujo_pre)
                 df_flujo_pre_w.to_excel(writer, sheet_name=nombre_hoja, startrow=fila_actual, startcol=0, index=False)
                 fila_actual += len(df_flujo_pre_w) + 2
-            
+
             # ========================================
             # TABLA: FLUJOS POSTCONTINGENCIA (w)
             # ========================================
@@ -325,36 +387,178 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                     startcol=0, index=False, header=False
                 )
                 
-                datos_flujo_post = {}
-                datos_flujo_post['Línea\ contingencia'] = [
-                    f"{int(branch_from[l])}-{int(branch_to[l])}"
-                    for l in range(nl)
-                ]
+                # Identificar líneas y trafos
+                lineas_idx = []
+                trafos_idx = []
                 
+                for l in range(nl):
+                    bus_from = int(branch_from[l])
+                    bus_to = int(branch_to[l])
+                    
+                    es_trafo = False
+                    for key, info in line_indices.items():
+                        if info["fbus"] == bus_from and info["tbus"] == bus_to:
+                            if "trafo" in key.lower():
+                                es_trafo = True
+                            break
+                    
+                    if es_trafo:
+                        trafos_idx.append(l)
+                    else:
+                        lineas_idx.append(l)
+                
+                # Construir TODAS las columnas primero
+                columnas = ['Branch']
                 for c in range(K):
                     tipo, idx = contingencias[c]
-                    #nombre_col = f'Cont{c+1}: {tipo}{idx}'
                     if tipo == "gen":
-                        nombre_col = f"Cont{c+1}: gen. {idx}"
+                        base = f"Cont{c+1}: gen. {idx}"
                     else:
                         if idx == 2:
-                            nombre_col = f"Cont{c+1}: alm. 2"
+                            base = f"Cont{c+1}: alm. 2"
                         elif idx == 4:
-                            nombre_col = f"Cont{c+1}: alm. 4"
+                            base = f"Cont{c+1}: alm. 4"
+                        elif idx == 11:
+                            base = f"Cont{c+1}: alm. 11"
                         else:
-                            nombre_col = f"Cont{c+1}: alm. ENAP"
-                    datos_flujo_post[nombre_col] = [
-                        round(float(f_post.X[l, c, w]), 3) for l in range(nl)
-                    ]
+                            base = f"Cont{c+1}: alm. ENAP"
+                    
+                    columnas.append(f"{base} - Flujo (MW)")
+                    columnas.append(f"{base} - Carg (%)")
                 
-                df_flujo_post_w = pd.DataFrame(datos_flujo_post)
+                # Construir datos con todas las contingencias
+                datos_flujo_post = []
+                
+                # LÍNEAS
+                if lineas_idx:
+                    # Fila separadora con TODAS las columnas vacías
+                    fila_sep_lineas = {col: '' for col in columnas}
+                    fila_sep_lineas['Branch'] = 'LÍNEAS'
+                    datos_flujo_post.append(fila_sep_lineas)
+                    
+                    # Datos de líneas
+                    for l in lineas_idx:
+                        bus_from = int(branch_from[l])
+                        bus_to = int(branch_to[l])
+                        fm = float(vars_case['FM'][l])
+                        
+                        fila = {'Branch': f'{bus_from}-{bus_to}'}
+                        
+                        for c in range(K):
+                            tipo, idx = contingencias[c]
+                            flujo = round(float(f_post.X[l, c, w]), 3)
+                            cargabilidad = round(abs(flujo) / fm * 100, 2) if fm > 0 else 0
+                            
+                            if tipo == "gen":
+                                base = f"Cont{c+1}: gen. {idx}"
+                            else:
+                                if idx == 2:
+                                    base = f"Cont{c+1}: alm. 2"
+                                elif idx == 4:
+                                    base = f"Cont{c+1}: alm. 4"
+                                elif idx == 11:
+                                    base = f"Cont{c+1}: alm. 11"
+                                else:
+                                    base = f"Cont{c+1}: alm. ENAP"
+                            
+                            fila[f"{base} - Flujo (MW)"] = flujo
+                            fila[f"{base} - Carg (%)"] = cargabilidad
+                        
+                        datos_flujo_post.append(fila)
+                
+                # TRANSFORMADORES
+                if trafos_idx:
+                    # Fila separadora con TODAS las columnas vacías
+                    fila_sep_trafos = {col: '' for col in columnas}
+                    fila_sep_trafos['Branch'] = 'TRANSFORMADORES'
+                    datos_flujo_post.append(fila_sep_trafos)
+                    
+                    # Datos de trafos
+                    for l in trafos_idx:
+                        bus_from = int(branch_from[l])
+                        bus_to = int(branch_to[l])
+                        fm = float(vars_case['FM'][l])
+                        
+                        fila = {'Branch': f'{bus_from}-{bus_to}'}
+                        
+                        for c in range(K):
+                            tipo, idx = contingencias[c]
+                            flujo = round(float(f_post.X[l, c, w]), 3)
+                            cargabilidad = round(abs(flujo) / fm * 100, 2) if fm > 0 else 0
+                            
+                            if tipo == "gen":
+                                base = f"Cont{c+1}: gen. {idx}"
+                            else:
+                                if idx == 2:
+                                    base = f"Cont{c+1}: alm. 2"
+                                elif idx == 4:
+                                    base = f"Cont{c+1}: alm. 4"
+                                elif idx == 11:
+                                    base = f"Cont{c+1}: alm. 11"
+                                else:
+                                    base = f"Cont{c+1}: alm. ENAP"
+                            
+                            fila[f"{base} - Flujo (MW)"] = flujo
+                            fila[f"{base} - Carg (%)"] = cargabilidad
+                        
+                        datos_flujo_post.append(fila)
+                
+                # Crear DataFrame con columnas ordenadas
+                df_flujo_post_w = pd.DataFrame(datos_flujo_post, columns=columnas)
                 df_flujo_post_w.to_excel(writer, sheet_name=nombre_hoja, startrow=fila_actual, startcol=0, index=False)
+                
                 fila_actual += len(df_flujo_post_w) + 3
 
 # 4. Formateo Final
 wb = load_workbook(nombre_archivo)
+
+from openpyxl.styles import Alignment, Font
+
 for hoja in wb.sheetnames:
     ws = wb[hoja]
+    
+    # Procesar combinación de encabezados PRIMERO
+    filas_a_procesar = []
+    
+    for row_idx, row in enumerate(ws.iter_rows(min_row=1), start=1):
+        if row[0].value and "Flujos postcontingencia" in str(row[0].value):
+            filas_a_procesar.append(row_idx + 1)  # header está 1 fila después
+    
+    # Procesar cada tabla de flujos post encontrada
+    for header_row_idx in reversed(filas_a_procesar):  # Procesar de abajo hacia arriba
+        col_idx = 2  # Columna B (después de "Branch")
+        
+        # Insertar fila para encabezados principales
+        ws.insert_rows(header_row_idx)
+        
+        # Procesar todas las columnas
+        while col_idx <= ws.max_column:
+            cell = ws.cell(row=header_row_idx + 1, column=col_idx)
+            if cell.value and "- Flujo (MW)" in str(cell.value):
+                # Extraer nombre base
+                base_name = str(cell.value).replace(" - Flujo (MW)", "")
+                
+                # Combinar celdas para el encabezado principal
+                ws.merge_cells(
+                    start_row=header_row_idx, start_column=col_idx,
+                    end_row=header_row_idx, end_column=col_idx + 1
+                )
+                
+                # Escribir nombre de contingencia
+                merged_cell = ws.cell(row=header_row_idx, column=col_idx)
+                merged_cell.value = base_name
+                merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+                merged_cell.font = Font(bold=True)
+                
+                # Actualizar subencabezados
+                ws.cell(row=header_row_idx + 1, column=col_idx).value = "Flujo (MW)"
+                ws.cell(row=header_row_idx + 1, column=col_idx + 1).value = "Carg (%)"
+                
+                col_idx += 2
+            else:
+                col_idx += 1
+    
+    # Ajustar ancho de columnas AL FINAL
     for col in ws.columns:
         max_length = 0
         col_letter = col[0].column_letter
@@ -364,7 +568,9 @@ for hoja in wb.sheetnames:
                     max_length = max(max_length, len(str(cell.value)))
             except:
                 pass
-        ws.column_dimensions[col_letter].width = min(max_length + 1, 30)
+        ws.column_dimensions[col_letter].width = min(max_length + 2, 30)
 
 wb.save(nombre_archivo)
-print(f"\nArchivo '{nombre_archivo}' generado exitosamente con ENS y flujos.")
+print(f"\nArchivo '{nombre_archivo}' generado exitosamente con ENS, flujos separados y cargabilidad.")
+
+os.startfile(nombre_archivo)
