@@ -8,6 +8,16 @@ import numpy as np
 import os
 
 nombre_archivo = "resultados_SM_PA_v7_estocastico.xlsx"
+# Diccionario para agregar nombres descriptivos a líneas específicas
+# Se incluyen ambos sentidos (ida y vuelta) para asegurar el match
+descripciones_lineas = {
+    (4, 5): "(66 kV)", (5, 4): "(66 kV)",
+    (7, 8): "(PE)", (8, 7): "(PE)",
+    (8, 9): "(PE)", (9, 8): "(PE)",
+    (9, 10): "(PE)", (10, 9): "(PE)",
+    (10, 12): "(WTG1-WTG2)", (12, 10): "(WTG1-WTG2)",
+    (12, 14): "(WTG2-WTG3)", (14, 12): "(WTG2-WTG3)"
+}
 
 # 1. Preparar DataFrame de reservas globales
 datos_reservas = []
@@ -92,6 +102,35 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
         df_reservas.to_excel(writer, sheet_name=nombre_hoja, startrow=fila_actual, startcol=4, index=False)
         
         fila_actual += max(len(df_costos), len(df_reservas)) + 2
+
+        # ====================================================================
+        # CLASIFICACIÓN: LÍNEAS VS TRAFOS
+        # Todo lo que esté en network["line_indices"] es Línea, el resto Trafo
+        # ====================================================================
+        line_indices = network["line_indices"]
+        lineas_idx = []
+        trafos_idx = []
+        
+        for l in range(nl):
+            bus_from = int(branch_from[l])
+            bus_to = int(branch_to[l])
+            
+            es_linea = False
+            
+            for key, info in line_indices.items():
+                f_b = int(info.get("fbus", -1))
+                t_b = int(info.get("tbus", -1))
+                
+                # Comprobación bidireccional por si los nodos están invertidos
+                if (f_b == bus_from and t_b == bus_to) or (f_b == bus_to and t_b == bus_from):
+                    es_linea = True
+                    break
+            
+            if es_linea:
+                lineas_idx.append(l)
+            else:
+                trafos_idx.append(l)
+        # ====================================================================
 
         # 3. Iterar sobre cada escenario de incertidumbre (w)
         for w in range(n_w_caso):
@@ -305,30 +344,6 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                     startcol=0, index=False, header=False
                 )
                 
-                # Obtener índices de líneas y trafos desde network
-                line_indices = network["line_indices"]
-                
-                # Identificar qué branches son líneas y cuáles trafos
-                lineas_idx = []
-                trafos_idx = []
-                
-                for l in range(nl):
-                    bus_from = int(branch_from[l])
-                    bus_to = int(branch_to[l])
-                    
-                    # Buscar si es trafo o línea
-                    es_trafo = False
-                    for key, info in line_indices.items():
-                        if info["fbus"] == bus_from and info["tbus"] == bus_to:
-                            if "trafo" in key.lower():
-                                es_trafo = True
-                            break
-                    
-                    if es_trafo:
-                        trafos_idx.append(l)
-                    else:
-                        lineas_idx.append(l)
-                
                 # Construir datos: primero líneas, luego trafos
                 datos_flujo_pre = []
                 
@@ -347,8 +362,13 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                         fm = float(vars_case['FM'][l])
                         cargabilidad = round(abs(flujo) / fm * 100, 2) if fm > 0 else 0
                         
+                        # Crear el nombre del branch e incluir la descripción si aplica
+                        nombre_branch = f'{bus_from}-{bus_to}'
+                        if (bus_from, bus_to) in descripciones_lineas:
+                            nombre_branch += f" {descripciones_lineas[(bus_from, bus_to)]}"
+
                         datos_flujo_pre.append({
-                            'Branch': f'{bus_from}-{bus_to}',
+                            'Branch': nombre_branch,
                             'Flujo (MW)': flujo,
                             'Cargabilidad (%)': cargabilidad
                         })
@@ -387,26 +407,6 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                     startcol=0, index=False, header=False
                 )
                 
-                # Identificar líneas y trafos
-                lineas_idx = []
-                trafos_idx = []
-                
-                for l in range(nl):
-                    bus_from = int(branch_from[l])
-                    bus_to = int(branch_to[l])
-                    
-                    es_trafo = False
-                    for key, info in line_indices.items():
-                        if info["fbus"] == bus_from and info["tbus"] == bus_to:
-                            if "trafo" in key.lower():
-                                es_trafo = True
-                            break
-                    
-                    if es_trafo:
-                        trafos_idx.append(l)
-                    else:
-                        lineas_idx.append(l)
-                
                 # Construir TODAS las columnas primero
                 columnas = ['Branch']
                 for c in range(K):
@@ -442,7 +442,12 @@ with pd.ExcelWriter(nombre_archivo, engine="openpyxl") as writer:
                         bus_to = int(branch_to[l])
                         fm = float(vars_case['FM'][l])
                         
-                        fila = {'Branch': f'{bus_from}-{bus_to}'}
+                        # Crear el nombre del branch e incluir la descripción si aplica
+                        nombre_branch = f'{bus_from}-{bus_to}'
+                        if (bus_from, bus_to) in descripciones_lineas:
+                            nombre_branch += f" {descripciones_lineas[(bus_from, bus_to)]}"
+                            
+                        fila = {'Branch': nombre_branch}
                         
                         for c in range(K):
                             tipo, idx = contingencias[c]
