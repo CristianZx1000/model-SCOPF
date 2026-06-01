@@ -244,6 +244,9 @@ if status == GRB.Status.OPTIMAL:
             vars_case = vars_list[i]
             p_pre_val = vars_case['p_pre'].X        # (ng, n_w)
             p_post_val = vars_case['p_post'].X      # (ng, K, n_w)
+            ploss_pre_val = vars_case['ploss_pre'].X # (nl, n_w)
+            ploss_post_val = vars_case['ploss_post'].X # (nl, K, n_w)
+
             contingencias = vars_case['contingencias']
             gen_names = vars_case['gen_names']
             ng = p_pre_val.shape[0]
@@ -261,19 +264,26 @@ if status == GRB.Status.OPTIMAL:
 
                     # Variación de potencia del sistema P_agc
                     if tipo == 'gen':
-                        P_agc = p_pre_val[index - 1, w]
+                        delta_loss = ploss_post_val[:, k_idx, w].sum() - ploss_pre_val[:, w].sum()
+                        P_agc = p_pre_val[index - 1, w] + delta_loss
+                        if index-1 in idx_erv:
+                            P_agc = p_pre_val[index - 1, w] + eta_list[w] + delta_loss
+
                     elif tipo == 'load':
                         nombre_k = f'Cont{k_idx+1}_load{index}'
                         Load_post = vars_case['Load_bus_post'][nombre_k]
                         Load_pre  = vars_case['Load_bus_pre']
                         if index == 2:
-                            P_agc = Load_pre[5] - Load_post[5]
+                            delta_load = Load_pre[5] - Load_post[5]
                         elif index == 4:
-                            P_agc = Load_pre[1] - Load_post[1]
+                            delta_load = Load_pre[1] - Load_post[1]
                         elif index == 11:
-                            P_agc = Load_pre[2] - Load_post[2]
+                            delta_load = Load_pre[2] - Load_post[2]
                         else:
-                            P_agc = Load_pre[7] - Load_post[7]
+                            delta_load = Load_pre[7] - Load_post[7]
+
+                        delta_loss = ploss_post_val[:, k_idx, w].sum() - ploss_pre_val[:, w].sum()
+                        P_agc = delta_load - delta_loss
 
                     if abs(P_agc) < 1e-4:
                         continue
@@ -320,7 +330,7 @@ if status == GRB.Status.OPTIMAL:
                         if not (tipo == 'gen' and h == index - 1)
                     )
                     print(f"      Σγ = {gamma_total:.4f} (debería ser ≈ 1)")
-                    
+
 elif status == GRB.Status.INF_OR_UNBD or \
     status == GRB.Status.INFEASIBLE  or \
     status == GRB.Status.UNBOUNDED:
