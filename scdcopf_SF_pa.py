@@ -1,4 +1,3 @@
-### Formulación SF
 from IPython import get_ipython
 
 # Limpiar la consola
@@ -21,13 +20,7 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-# import case_SM_PA_V2 as mpc # sep_SM_PA_v4.pdf 
-# valores_excepciones = [2, 3, 4, 6, 7]
-
 import case_SM_PA_V3 as mpc # sep_SM_PA_v5.pdf
-#valores_excepciones = [2, 3, 6, 8, 9]
-
-# excepciones = {x - 1 for x in valores_excepciones}
 
 # Enlazar python con PowerFactory # llamar al sistema operativo
 import os;
@@ -46,10 +39,8 @@ app=pf.GetApplication()
 # Activar el proyecto
 user =app.GetCurrentUser()                # abre el usuario
 project=app.ActivateProject('BD SM Punta Arenas 2023 ECF y EDAC wind') # abre el archivo pfd
-#project=app.ActivateProject('BD SM Punta Arenas 2023 ECF y EDAC AGC') # abre el archivo pfd
+#project=app.ActivateProject('BD SM Punta Arenas 2023 ECF y EDAC AGC')
 prj = app.GetActiveProject()              # activar el proyecto
-
-t0=time.time()
 
 # 1: Obtener los datos de la red
 scenarios_data = mpc.get_scenarios_data(app, prj)
@@ -60,17 +51,15 @@ gen_agc = scenarios_data["sistema"]["gen_agc_info"]
 network = mpc.build_network_matrices(scenarios_data, baseMVA=100.0)
 
 dicc_gen_agc = scenarios_data["sistema"]["dicc_gen_agc"]
-
 dicc_gen = {name: i for i, name in enumerate(dicc_gen_agc.keys())}
 
 ng_g = len(dicc_gen_agc)
 
-agc_u = 1
-
 #⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡
 # === Modelo de la incertidumbre ===
-p_fore = 3 #3.45    # pronóstico
-alfa = 0.1             # factor de la desviación estándar
+
+p_fore = 3.45 #*4/3.45  #3.45  # pronóstico #*4
+alfa = 0.1          # factor de la desviación estándar
 
 sigma = alfa * p_fore  # desviación estándar
 zeta = 3 * sigma       # límite de desviación
@@ -81,11 +70,11 @@ from scipy.stats import truncnorm
 rng = np.random.default_rng(42)     # semilla
 # Normal truncada en [-3, 3]
 a, b = -3, 3
-u = truncnorm.rvs(a, b, loc=0, scale=1, size=5, random_state=rng)
+u = truncnorm.rvs(a, b, loc=0, scale=1, size=6, random_state=rng)
 # Normalizar a [-1,1]
 numeros = u / 3 # u_norm
 
-#numeros = numeros[numeros <= 0.54]
+#numeros = numeros[numeros <= 0.42]
 print(len(numeros))
 print("Media:", round(np.mean(numeros),5), "Std (poblacional):", round(np.std(numeros),5), 
       "Std (muestral):", round(np.std(numeros, ddof=1),5))
@@ -99,23 +88,25 @@ idx_max = np.argmin(np.abs(numeros - 1))
 val_max = numeros[idx_max]
 print("Valor máximo", idx_max, val_max)
 
-epsilon_list = numeros * zeta #-zeta #0 #zeta
-#epsilon_list =  np.array([1]) * zeta * 0.42 # factible si epsilan < ? / L=2 --> 0.54, L=6 --> 0.42
+exp_val = True
+if not exp_val:
+    epsilon_list = numeros * zeta
+else:
+    epsilon_list = np.array([0]) * zeta # factible si epsilon < ? / L=2 --> 0.54, L=6 --> 0.42
+
 n_w = len(epsilon_list)
 
-eta_list = zeta + epsilon_list  # parte estocástica
+eta_list = zeta + epsilon_list     # parte estocástica
+
+t0=time.time()
 
 # ==== Modelo ====
-m=Model('DCOPF_3b')
+m = Model('DCOPF_3b')
 m.setParam('OutputFlag', False)
 
 # Reservas globales
-r_up_g=m.addMVar(ng_g, vtype=GRB.CONTINUOUS, lb=0, name='r_up_g')
-r_dn_g=m.addMVar(ng_g, vtype=GRB.CONTINUOUS, lb=0, name='r_dn_g')
-
-if agc_u:
-    u_up_g=m.addMVar(ng_g, vtype=GRB.BINARY, name='u_up_g')
-    u_dn_g=m.addMVar(ng_g, vtype=GRB.BINARY, name='u_dn_g')
+r_up_g = m.addMVar(ng_g, vtype=GRB.CONTINUOUS, lb=0, name='r_up_g')
+r_dn_g = m.addMVar(ng_g, vtype=GRB.CONTINUOUS, lb=0, name='r_dn_g')
 
 #########################################################################################################
 
@@ -123,13 +114,19 @@ Cop = LinExpr()
 Cto_up_g = np.zeros(ng_g)
 Cto_dn_g = np.zeros(ng_g)
 
+# On/off
+g_s = True
+
+casos = list(range(1, 7))
+#casos = [4]             # solo un caso
+casos_ejecutar = [u for u in casos if u != 3] # Nota: caso 3 se ignora, es igual al caso 2, también se omite en case_SM_PA_V3.py
+n_casos = len(casos_ejecutar)
+peso_c = 1 / n_casos if n_casos > 1 else 1.0
+
 vars_list = []
 
 # 3: Procesar cada caso
-for u in range(1, 7):
-    if u == 3:
-        continue
-
+for u in casos_ejecutar:
     # Seleccionar el escenario
     nombre_escenario = f"CASO {u}"
     escenario = prj.GetContents(nombre_escenario, 1)[0]
@@ -153,6 +150,20 @@ for u in range(1, 7):
 
     Pmax = data['Pmax']
     Pmin = data['Pmin']
+
+    # Solo 3 unidades son eólicas en todos los casos, son los últimos tres generadores
+    idx_erv = range(ng-3,ng)# [ng-3, ng-2, ng-1]
+
+    # for kr in idx_erv:
+    #     Pmax[kr] *= 1#*4/3.45#4
+    # for krt in range(ng):
+    #     if krt not in idx_erv:
+    #         Pmax[krt] *= 1
+    #         Pmin[krt] *= 1#0.25
+    
+    n_erv = len(idx_erv) # 3 gen. eólicos
+    eta_vector = np.zeros(ng) # inicialización de eta: parte estocástica
+
     # Ctos. generadores
     a_g = data['a_g']
     b_g = data['b_g']
@@ -163,7 +174,7 @@ for u in range(1, 7):
     branch_t = data['branch_t']
 
     # Límite reservas
-    RUp = RDn = Pmax - Pmin     # límites mín./máx.
+    RUp = RDn = Pmax - Pmin         # límites mín./máx.
 
     # Cto. reserva
     Cto_up_g_caso = data["Cto_up_g"]
@@ -177,14 +188,32 @@ for u in range(1, 7):
 
     Cg = data['Cg']             # matriz de conexiones
 
-    FM = data['FM']                  # F^M
-    A_bar = data['Sf'] + data['St']  # matriz de incidencia no orientada
-    SFR = data['SFR']                # matriz de Shift-Factors con pérdidas
-    g = data['g']                    # conductancia
-    b = data['b']                    # suceptancia
+    FM = data['FM']             # F^M
+    #FM *= 4
+    A = data['A']               # matriz de incidencia
+    A_bar = data['A_bar']       # matriz de incidencia no orientada
+    BfR = data['BfR']           # yA con pérdidas
+    g = data['g']               # conductancia
+    b = data['b']               # suceptancia
 
     # Carga pre
     Load_bus_pre = data['Load_bus_pre']
+    # Load_bus_pre[2] -= 2.1 - 0.165 # PE CN
+    # if u in {1, 4, 5}:
+    #     Load_bus_pre *= 0.8
+    #     Load_bus_pre[2] -= 2.1 # 2.55 # PE CN
+    # if u == 1:
+    #     print(Load_bus_pre)
+    #     break
+    # if u == 5:
+        # Load_bus_pre[1] *= 2
+        # Load_bus_pre[5] *= 2
+    # Load_bus_pre *= 0.8 # 0.4#reducir dda en 0.85 en todos los casos con agc_u=True
+    # Load_bus_pre[1] *= 1 # C2: 0.8, C4: 0.4
+    # Load_bus_pre[2] *= 1 # C2: 0.8, C4: 0.4
+    # Load_bus_pre[5] *= 1.1 # C2: 0.8, C4: 0.45
+    # Load_bus_pre[7] *= 0.001#0.001, enap
+
     alm_2 = data['alm_2']
     alm_4 = data['alm_4']
     alm_11 = data['alm_11']
@@ -192,28 +221,27 @@ for u in range(1, 7):
 
     # Generadores que participan en el CSF
     vf = data['vf']     # parámetro binario
-
-    # Solo 3 unidades son eólicas en todos los casos, son los últimos tres generadores
-    idx_erv = [ng-3, ng-2, ng-1]
-    n_erv = len(idx_erv) # 3 gen. eólicos
-    eta_vector = np.zeros(ng) # inicialización de eta: parte estocástica
     
     # Número de tramos para la linealización de las pérdidas
-    L = 2
+    L = 6 #6
 
     k_coef = np.zeros((nl,L))
     for l in range(1,L+1):
         k_coef[:,l-1] = (2*l-1) * FM/(Sb*L)
 
     # Cond. de complementariedad    
-    compl = 1
+    compl = True
 
     # Cond. de adyacencia
-    ady = 1  
+    ady = True
 
     # ENS
-    Cto_ens = 246.59
-    Pmax_ens = Load_bus_pre # np.ones(nb) * 100
+    Cto_ens = 10.04e3
+    #Cto_ens = 246.59
+    Pmax_ens = Load_bus_pre # np.ones(nb) * 50
+    # if u == 1:
+    #     print(nb)
+    #     print(f"Número de barras: {len(Load_bus_pre)}", Load_bus_pre)
     
     contingencias = [('gen', i+1) for i in range(ng)]
     contingencias += [('load', 2), ('load', 4), ('load', 11), ('load', 15)]
@@ -224,11 +252,10 @@ for u in range(1, 7):
     # Definición de variables
 
     # Precontigencia
-
-    p_pre = m.addMVar((ng, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'Pg_pre_caso{u}') #lb lim inf p>=0
-    p_ens_pre = m.addMVar((nb, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'p_ens_pre_caso{u}')
     
-    # m.addConstrs((p_ens_pre[i,w] == 0 for i in range(nb-1) for w in range(n_w) if i not in excepciones), name=f'p_ens_pre_bus_caso{u}')
+    p_pre = m.addMVar((ng, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'Pg_pre_caso{u}') #lb lim inf p>=0
+    d_pre = m.addMVar((nb, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name=f'd_pre_caso{u}')
+    p_ens_pre = m.addMVar((nb, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'p_ens_pre_caso{u}')
 
     f_pre = m.addMVar((nl, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name=f'f_pre_caso{u}')
     fp_pre = m.addMVar((nl, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'fp_pre_caso{u}')
@@ -241,10 +268,9 @@ for u in range(1, 7):
     # Postcontingencia
 
     p_post = m.addMVar((ng, K, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'Pg_post_caso{u}')
+    d_post = m.addMVar((nb, K, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name=f'd_post_caso{u}')
     p_ens_post = m.addMVar((nb, K, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'p_ens_post_caso{u}')
-
-    # m.addConstrs((p_ens_post[i,k_id,w] == 0 for i in range(nb-1) for k_id in range(K) for w in range(n_w) if i not in excepciones), name=f'p_ens_post_bus_caso{u}')
-
+    
     f_post = m.addMVar((nl, K, n_w), vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, ub=GRB.INFINITY, name=f'f_post_caso{u}')
     fp_post = m.addMVar((nl, K, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'fp_post_caso{u}')
     fn_post = m.addMVar((nl, K, n_w), vtype=GRB.CONTINUOUS, lb=0, name=f'fn_post_caso{u}')
@@ -253,21 +279,19 @@ for u in range(1, 7):
     n_lf_post = m.addMVar((nl, K, n_w), vtype=GRB.BINARY, name=f'n_lf_post_caso{u}')
     n_df_post = m.addMVar((nl, L, K, n_w), vtype=GRB.BINARY, name=f'n_df_post_caso{u}')
 
+    # Variable de encendido de gen.
+    if g_s:
+        u_i = m.addMVar(ng, vtype=GRB.BINARY, name=f'u_i_caso{u}')
+        m.addConstrs((u_i[h] == 1 for h in idx_erv), name=f'u_i_caso{u}_ones')
+
     # Reserva caso u
     r_up = m.addMVar(ng, vtype=GRB.CONTINUOUS, lb=0, name=f'r_up_caso{u}')
     r_dn = m.addMVar(ng, vtype=GRB.CONTINUOUS, lb=0, name=f'r_dn_caso{u}')
-
-    if agc_u:
-        u_up = m.addMVar(ng, vtype=GRB.BINARY, name=f'u_up_caso{u}')
-        u_dn = m.addMVar(ng, vtype=GRB.BINARY, name=f'u_dn_caso{u}')
 
     # Acoplamiento con reservas globales
     for i_local, i_global in enumerate(idx_activos):
         m.addConstr(r_up[i_local] == r_up_g[i_global])
         m.addConstr(r_dn[i_local] == r_dn_g[i_global])
-        if agc_u:
-            m.addConstr(u_up[i_local] == u_up_g[i_global])
-            m.addConstr(u_dn[i_local] == u_dn_g[i_global])
     
     #####################################################################################################################################
 
@@ -280,21 +304,21 @@ for u in range(1, 7):
 
     for w in range(n_w):
         # Precontingencia para escenario w
-        Cop_pre_w = a_g @ p_pre[:, w] + p_ens_pre[:, w].sum() * Cto_ens
-        #Cop_pre_w = p_ens_pre[:, w].sum() * Cto_ens
+        Cop_pre_w = a_g @ (p_pre[:, w] + u_i*0.2) + p_ens_pre[:, w].sum() * Cto_ens
         Cop_pre_total += prob_w * Cop_pre_w
     
         # Postcontingencia para escenario w (promedio sobre todas las contingencias)
         for k in range(K):
-            Cop_post_w_k = a_g @ p_post[:, k, w] + p_ens_post[:, k, w].sum() * Cto_ens
+            Cop_post_w_k = a_g @ (p_post[:, k, w] + u_i*0.2) + p_ens_post[:, k, w].sum() * Cto_ens
             #Cop_post_w_k = p_ens_post[:, k, w].sum() * Cto_ens
             Cop_post_total += prob_w * Cop_post_w_k / K
 
     # Contribución del caso u a la FO total
-    Cop += (1/5) * (Cop_pre_total + Cop_post_total)
+    Cop += peso_c * (Cop_pre_total + Cop_post_total)
 
     vars_case = {
         'p_pre': p_pre,
+        'Pmax': Pmax,
         'f_pre': f_pre,
         'FM': FM,
         'ploss_pre': ploss_pre,
@@ -314,13 +338,14 @@ for u in range(1, 7):
     }
 
     # ==== Subjet to: ====
-
+    
     for w in range(n_w):
         eta = eta_list[w]
         for idx_w in idx_erv:
             eta_vector[idx_w] = eta
 
         p_pre_w = p_pre[:, w]
+        d_pre_w = d_pre[:, w]
         p_ens_pre_w = p_ens_pre[:, w]
         f_pre_w = f_pre[:, w]
         fp_pre_w = fp_pre[:, w]
@@ -333,14 +358,23 @@ for u in range(1, 7):
         #####################################################################################################################################
         # ==== Precontingencia ====
 
+        # Barra SL
+        m.addConstr(d_pre_w[SL] == 0, f'SL_pre_caso{u}_w{w}')
+
         # Balance (LCK)
-        m.addConstr(p_pre_w.sum() + eta_vector.sum() + p_ens_pre_w.sum() == Load_bus_pre.sum() + ploss_pre_w.sum(), name=f'LCK_pre_caso{u}_w{w}') #Cg*Pg+P_ens-D-0.5*A^T*P_loss=A^T*f
+        m.addConstr(Cg @ p_pre_w + Cg @ eta_vector + p_ens_pre_w - Load_bus_pre - 0.5 * A_bar.T @ ploss_pre_w == A.T @ f_pre_w, name=f'LCK_pre_caso{u}_w{w}') #Cg*Pg+P_ens-D-0.5*A^T*P_loss=A^T*f
+
+        # Límite ángulos
+        m.addConstr(-A @ d_pre_w >= -pi/2, name=f'dM_pre_caso{u}_w{w}')
+        m.addConstr(A @ d_pre_w >= -pi/2, name=f'dm_pre_caso{u}_w{w}')
 
         # P_max y P_min
-        m.addConstr(p_pre_w + eta_vector>= Pmin, name=f'P_min_pre_caso{u}_w{w}')
-        m.addConstr(-p_pre_w - eta_vector>= -Pmax, name=f'P_max_pre_caso{u}_w{w}')
-        # m.addConstr(p_pre_w - r_dn >= Pmin, name = f'P_min_pre_rdn_caso{u}_w{w}')
-        # m.addConstr(-p_pre_w - r_up >= -Pmax, name= f'P_max_pre_rup_caso{u}_w{w}')
+        if not g_s:
+            m.addConstr(p_pre_w + eta_vector >= Pmin, name=f'P_min_pre_caso{u}_w{w}')
+            m.addConstr(-p_pre_w - eta_vector >= -Pmax, name=f'P_max_pre_caso{u}_w{w}')
+        else:
+            m.addConstr(p_pre_w + eta_vector * u_i >= Pmin * u_i, name=f'P_min_pre_caso{u}_w{w}')
+            m.addConstr(-p_pre_w - eta_vector * u_i >= -Pmax * u_i, name=f'P_max_pre_caso{u}_w{w}')
 
         # Reserva
         m.addConstr(-r_up >= -RUp * vf, name=f'RUp_caso{u}_w{w}')
@@ -351,36 +385,31 @@ for u in range(1, 7):
             m.addConstr(-p_pre_w[idx_e] - r_up[idx_e] >= -p_VUL, name = f'P_base_VUL{idx_e}_caso{u}_{w}')
 
         # ENS
-        m.addConstr(p_ens_pre_w <= Pmax_ens, name=f'P_max_ens_pre_caso{u}_w{w}')
+        m.addConstr(-p_ens_pre_w >= -Pmax_ens, name=f'P_max_ens_pre_caso{u}_w{w}')
 
         #####################################################################################################################################
         # Límite y pérdidas líneas pre
-        
+
         for j in range(nl):
             sum_kdf_pre = df_pre_w[j, :] @ k_coef[j, :]
             m.addConstr(ploss_pre_w[j] == (g[j]/b[j]**2) * sum_kdf_pre, name=f'f_lin_{j}_pre_caso{u}_w{w}')
 
-        if 1-ady:
+        if not ady:
             for l in range(0,L):
                 m.addConstr(-df_pre_w[:, l] >= -FM/L, name=f'df_max_pre_{l}_caso{u}_w{w}') 
-                m.addConstr(df_pre_w[:, l] >= 0, name=f'df_min_pre_{l}_caso{u}_w{w}')
 
-        m.addConstr(f_pre_w == SFR @ (Cg @ p_pre_w + Cg @ eta_vector + p_ens_pre_w - Load_bus_pre - 0.5 * A_bar.T @ ploss_pre_w), name = f'LVK_pre_caso{u}_w{w}')
+        m.addConstr(f_pre_w == -Sb * BfR @ d_pre_w, name = f'LVK_pre_caso{u}_w{w}')
         m.addConstr(-f_pre_w >= -FM, name = f'fmax_pre_caso{u}_w{w}')
         m.addConstr(f_pre_w >= -FM, name = f'fmin_pre_caso{u}_w{w}')
 
         # Sin cond. de complementariedad
-        if 1-compl:
+        if not compl:
             m.addConstr(-fp_pre_w >= -FM, name = f'fp_max_pre_caso{u}_w{w}')
-            m.addConstr(fp_pre_w >= 0, name = f'fp_min_pre_caso{u}_w{w}')
             m.addConstr(-fn_pre_w >= -FM, name = f'fn_max_pre_caso{u}_w{w}')
-            m.addConstr(fn_pre_w >= 0, name = f'fn_min_pre_caso{u}_w{w}')
         else:
         # Con cond. de complementariedad    
             m.addConstr(-fp_pre_w >= -FM * n_lf_pre_w, name = f'fp_max_pre_caso{u}_w{w}')
-            m.addConstr(fp_pre_w >= 0, name = f'fp_min_pre_caso{u}_w{w}')
             m.addConstr(-fn_pre_w >= -FM * (1 - n_lf_pre_w), name = f'fn_max_pre_caso{u}_w{w}')
-            m.addConstr(fn_pre_w >= 0, name = f'fn_min_pre_caso{u}_w{w}')
 
         for j in range(nl):
             m.addConstr(df_pre_w[j, :].sum() == fp_pre_w[j] + fn_pre_w[j], name = f'f0_pre_{j}_caso{u}_w{w}')
@@ -397,7 +426,6 @@ for u in range(1, 7):
                         m.addConstr(df_pre_w[j, l] >= n_df_pre_w[j, l] * FM[j]/L, name=f'df_pre_{j}_{l}_min_caso{u}_w{w}')
                     elif l == L-1:
                         m.addConstr(-df_pre_w[j, l] >= -n_df_pre_w[j, l-1] * FM[j]/L, name=f'df_pre_{j}_{l}_max_caso{u}_w{w}')
-                        m.addConstr(df_pre_w[j, l] >= 0, name=f'df_pre_{j}_{l}_min_caso{u}_w{w}')
                     else:        
                         m.addConstr(-df_pre_w[j, l] >= -n_df_pre_w[j, l-1] * FM[j]/L, name=f'df_pre_{j}_{l}_max_caso{u}_w{w}')
                         m.addConstr(df_pre_w[j, l] >= n_df_pre_w[j, l] * FM[j]/L, name=f'df_pre_{j}_{l}_min_caso{u}_w{w}')
@@ -407,6 +435,7 @@ for u in range(1, 7):
         
         for k_idx,(tipo,index) in enumerate(contingencias):
             p_post_k     = p_post[:,k_idx, w]
+            d_post_k     = d_post[:,k_idx, w]
             p_ens_post_k = p_ens_post[:,k_idx, w]
             f_post_k     = f_post[:,k_idx, w]
             fp_post_k    = fp_post[:,k_idx, w]
@@ -420,13 +449,13 @@ for u in range(1, 7):
             # N-1 cargas
             if tipo == 'load':
                 Load_bus_post_k = Load_bus_pre.copy()
-                if index == 2:  
+                if index == 2:    
                     Load_bus_post_k[5] -= alm_2
-                elif index == 4:
+                elif index == 4:    
                     Load_bus_post_k[1] -= alm_4
-                elif index == 11:
+                elif index == 11:    
                     Load_bus_post_k[2] -= alm_11
-                else:
+                else:    
                     Load_bus_post_k[7] -= alm_enap
 
             # N-1 gen.
@@ -434,15 +463,18 @@ for u in range(1, 7):
                 # Anular el componente estocástico para el generador fuera de servicio
                 Load_bus_post_k = Load_bus_pre.copy()
                 eta_vector_post[index-1] = 0
-
+                
             else:
                 Load_bus_post_k = Load_bus_pre.copy()
             
             nombre_k = f"Cont{k_idx+1}_{tipo}{index}"
             vars_case['Load_bus_post'][nombre_k] = Load_bus_post_k
 
+            # Barra SL
+            m.addConstr(d_post_k[SL] == 0, f'SL_post[{k_idx}]_caso{u}_w{w}')
+
             # Balance (LCK)
-            m.addConstr(p_post_k.sum() + eta_vector_post.sum() +  p_ens_post_k.sum()  ==  Load_bus_post_k.sum() + ploss_post_k.sum(), name = f'LCK_post[{k_idx}]_caso{u}_w{w}')
+            m.addConstr(Cg @ p_post_k + Cg @ eta_vector_post + p_ens_post_k - Load_bus_post_k - 0.5 * A_bar.T @ ploss_post_k == A.T @ f_post_k, name = f'LCK_post[{k_idx}]_caso{u}_w{w}')
 
             #####################################################################################################################################
             # Límite y pérdidas líneas post
@@ -450,27 +482,24 @@ for u in range(1, 7):
                 sum_kdf_post = df_post_k[j,:] @ k_coef[j,:]
                 m.addConstr(ploss_post_k[j] == (g[j]/b[j]**2) * sum_kdf_post, name=f'f_lin_{j}_{k_idx}_post_caso{u}_w{w}') 
 
-            if 1-ady:
+            if not ady:
                 for l in range(0,L):
                     m.addConstr(-df_post_k[:,l] >= -FM/L, name=f'df_max_post[{k_idx}]_{l}_caso{u}_w{w}') 
-                    m.addConstr(df_post_k[:,l] >= 0, name=f'df_min_post[{k_idx}]_{l}_caso{u}_w{w}')
+                    #m.addConstr(df_post_k[:,l] >= 0, name=f'df_min_post[{k_idx}]_{l}_caso{u}_w{w}')
 
-            m.addConstr(f_post_k == SFR @ (Cg @ p_post_k + Cg @ eta_vector_post +  p_ens_post_k - Load_bus_post_k - 0.5 * A_bar.T @ ploss_post_k), name = f'LVK_post[{k_idx}]_caso{u}_w{w}')
+            m.addConstr(f_post_k == -Sb * BfR @ d_post_k, name = f'LVK_post[{k_idx}]_caso{u}_w{w}')
             m.addConstr(-f_post_k >= -FM, name = f'fmax_post[{k_idx}]_caso{u}_w{w}')
             m.addConstr(f_post_k >= -FM, name = f'fmin_post[{k_idx}]_caso{u}_w{w}')
 
             # Sin cond. de complementariedad
-            if 1-compl:
+            if not compl:
                 m.addConstr(-fp_post_k >= -FM, name = f'fp_max_post[{k_idx}]_caso{u}_w{w}')
-                m.addConstr(fp_post_k >= 0, name = f'fp_min_post[{k_idx}]_caso{u}_w{w}')
                 m.addConstr(-fn_post_k >= -FM, name = f'fn_max_post[{k_idx}]_caso{u}_w{w}')
-                m.addConstr(fn_post_k >= 0, name = f'fn_min_post[{k_idx}]_caso{u}_w{w}')
+                
             else:
             # Con cond. de complementariedad    
                 m.addConstr(-fp_post_k >= -FM * n_lf_post_k, name = f'fp_max_post[{k_idx}]_caso{u}_w{w}')
-                m.addConstr(fp_post_k >= 0, name = f'fp_min_post[{k_idx}]_caso{u}_w{w}')
                 m.addConstr(-fn_post_k >= -FM * (1 - n_lf_post_k), name = f'fn_max_post[{k_idx}]_caso{u}_w{w}')
-                m.addConstr(fn_post_k >= 0, name = f'fn_min_post[{k_idx}]_caso{u}_w{w}')
 
             for j in range(nl):
                 m.addConstr(df_post_k[j,:].sum() == fp_post_k[j] + fn_post_k[j], name = f'f0_post[{k_idx}]_{j}_caso{u}_w{w}')
@@ -487,20 +516,28 @@ for u in range(1, 7):
                             m.addConstr(df_post_k[j,l] >= n_df_post_k[j,l] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')
                         elif l == L-1:
                             m.addConstr(-df_post_k[j,l] >= -n_df_post_k[j,l-1] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_max_caso{u}_w{w}')
-                            m.addConstr(df_post_k[j,l] >= 0, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')
+                            #m.addConstr(df_post_k[j,l] >= 0, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')
                         else:        
                             m.addConstr(-df_post_k[j,l] >= -n_df_post_k[j,l-1] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_max_caso{u}_w{w}')
                             m.addConstr(df_post_k[j,l] >= n_df_post_k[j,l] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')                          
 
             #####################################################################################################################################
+            # Límite ángulos
+            m.addConstr(-A @ d_post_k >= -pi/2, name = f'dM_post[{k_idx}]_caso{u}_w{w}')
+            m.addConstr(A @ d_post_k >= -pi/2, name = f'dm_post[{k_idx}]_caso{u}_w{w}')
+
             # Generador fuera de servicio
             if tipo == 'gen':
                 m.addConstr(p_post_k[index-1] == 0, f'Out_service[{k_idx}]_caso{u}_w{w}')
                 for h in range(ng):
                     if h != index-1:   # todos excepto el fuera de servicio
                         # P_max y P_min
-                        m.addConstr(p_post_k[h] + eta_vector_post[h] >= Pmin[h], name=f'Pmin_post[{k_idx},{h}]_caso{u}_w{w}')
-                        m.addConstr(-p_post_k[h] - eta_vector_post[h] >= -Pmax[h], name=f'Pmax_post[{k_idx},{h}]_caso{u}_w{w}')
+                        if not g_s:    
+                            m.addConstr(p_post_k[h] + eta_vector_post[h] >= Pmin[h], name=f'Pmin_post[{k_idx},{h}]_caso{u}_w{w}')
+                            m.addConstr(-p_post_k[h] - eta_vector_post[h] >= -Pmax[h], name=f'Pmax_post[{k_idx},{h}]_caso{u}_w{w}')
+                        else:
+                            m.addConstr(p_post_k[h] + eta_vector_post[h] * u_i[h] >= Pmin[h] * u_i[h], name=f'Pmin_post[{k_idx},{h}]_caso{u}_w{w}')
+                            m.addConstr(-p_post_k[h] - eta_vector_post[h] * u_i[h] >= -Pmax[h] * u_i[h], name=f'Pmax_post[{k_idx},{h}]_caso{u}_w{w}')
                                                
                         #  Gen. renovables (límite VUL)
                         if h in idx_erv:
@@ -512,8 +549,12 @@ for u in range(1, 7):
             
             else:
                 # P_max y P_min
-                m.addConstr(p_post_k + eta_vector_post >= Pmin, name = f'P_min_post[{k_idx}]_caso{u}_w{w}')
-                m.addConstr(-p_post_k - eta_vector_post >= -Pmax, name= f'P_max_post[{k_idx}]_caso{u}_w{w}')
+                if not g_s:
+                    m.addConstr(p_post_k + eta_vector_post >= Pmin, name = f'P_min_post[{k_idx}]_caso{u}_w{w}')
+                    m.addConstr(-p_post_k - eta_vector_post >= -Pmax, name= f'P_max_post[{k_idx}]_caso{u}_w{w}')
+                else:
+                    m.addConstr(p_post_k + eta_vector_post * u_i >= Pmin * u_i, name = f'P_min_post[{k_idx}]_caso{u}_w{w}')
+                    m.addConstr(-p_post_k - eta_vector_post * u_i >= -Pmax * u_i, name= f'P_max_post[{k_idx}]_caso{u}_w{w}')
 
                 # Gen. renovables (límite VUL)
                 for idx_e in idx_erv:
@@ -521,17 +562,14 @@ for u in range(1, 7):
 
                 # Reserva
                 m.addConstr(p_pre_w + r_up >= p_post_k, name = f'Up[{k_idx}]_caso{u}_w{w}')
-                m.addConstr(- p_pre_w + r_dn >= -p_post_k, name = f'Dn[{k_idx}]_caso{u}_w{w}')
+                m.addConstr(-p_pre_w + r_dn >= -p_post_k, name = f'Dn[{k_idx}]_caso{u}_w{w}')
 
             # ENS
             m.addConstr(-p_ens_post_k >= -Pmax_ens, name=f'P_max_ens_post[{k_idx}]_caso{u}_w{w}')
         
     vars_list.append(vars_case)
 
-if not agc_u:
-    C_res = r_up_g @ Cto_up_g + r_dn_g @ Cto_dn_g
-else:
-    C_res = u_up_g @ Cto_up_g + u_dn_g @ Cto_dn_g + (r_up_g + r_dn_g) @ (np.ones(ng_g) * 1e-6)
+C_res = r_up_g @ Cto_up_g + r_dn_g @ Cto_dn_g
 
 Cop += C_res
 
@@ -548,42 +586,3 @@ elif status == GRB.Status.INF_OR_UNBD or \
     status == GRB.Status.INFEASIBLE  or \
     status == GRB.Status.UNBOUNDED:
     print('The model cannot be solved because it is infeasible or unbounded => status "%d"' % status)
-
-# Print resultados
-status = m.Status
-if status == GRB.Status.OPTIMAL:    
-    # Obtener precios sombra
-    fixed = m.fixed()
-    fixed.optimize()
-
-    print('Costo total = %.2f ($/h)' % (m.objVal))
-    print('num_Vars = %d / num_Const = %d / num_NonZeros = %d' % (m.NumVars, m.NumConstrs, m.DNumNZs))
-    print('Formulation time: %.4f s' % (t1-t0))
-    print('Solution time: %.4f s' % (t2-t1))
-    print('Solver time: %.4f s' % (m.Runtime))
-
-    print("\n" + "=" * 5 + " Reservas " + "=" * 5)
-    print('Costo de reservas: %.2f $/h' % (C_res.getValue()))
-    print("-" * 25)
-    
-    reservas = []
-    for name in gen_agc:
-        matches = [key for key in dicc_gen.keys() if name in key]
-        i = dicc_gen[matches[0]]
-        print(f"r_up [{i+1}, {name}] = {r_up_g.X[i]:.3f} MW")    
-        print(f"r_dn [{i+1}, {name}] = {r_dn_g.X[i]:.3f} MW")
-        reservas.append({
-            "Generador": name,
-            "r_up": round(r_up_g.X[i], 3),
-            "r_dn": round(r_dn_g.X[i], 3)
-        })
-    print("_" * 80)
-    print(f" Pronóstico: {p_fore:.3f} MW  |  p_VUL: {p_VUL:.3f} MW")
-    print("_" * 80)
-elif status == GRB.Status.INF_OR_UNBD or \
-    status == GRB.Status.INFEASIBLE  or \
-    status == GRB.Status.UNBOUNDED:
-    print('The model cannot be solved because it is infeasible or unbounded => status "%d"' % status)
-    m.computeIIS()
-    m.write("model_iis.ilp")
-    print("IIS written to model_iis.ilp")
