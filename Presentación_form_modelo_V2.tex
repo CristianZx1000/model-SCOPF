@@ -15,23 +15,23 @@
 		\hline
 		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 2.027,45 \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 2.027,36 \\
 		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 402,52 \\
 		\multicolumn{2}{|c|}{Costo de reserva} & 159,77 \\
 		\multicolumn{2}{|c|}{Costo de reserva Up} & 148,8 \\
 		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,97 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.465,16 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.465,07 \\
 		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
 		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
 		Unidad Nº 4 Solar Mars & 50 & 0 \\
-		Unidad Nº 7 Solar Titan & 33,33 & 0 \\
-		Unidad Nº 9 Solar Titan & 50,52 & 0 \\
-		WTG1 & 0 & 66,2 \\
-		WTG2 & 0 & 66,96 \\
-		WTG3 & 0 & 45,26 \\
+		Unidad Nº 7 Solar Titan & 32,88 & 0 \\
+		Unidad Nº 9 Solar Titan & 50,97 & 0 \\
+		WTG1 & 0 & 66,96 \\
+		WTG2 & 0 & 66,22 \\
+		WTG3 & 0 & 45,24 \\
 		\hline
 		\textbf{Reserva total PE} & \textbf{0} & \textbf{59,47} \\
 		\hline
@@ -53,12 +53,13 @@
 		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
 		\hline
 		Unidad Nº 4 Solar Mars & 4,93 & 0 & 9,93 & 4,93 & 4,93 \\
-		Unidad Nº 7 Solar Titan & 5 & 9,93 & 0 & 7,82 & 5 \\
-		WTG1 & 2,31 & 2,31 & 2,31 & 0 & 1,9 \\
-		WTG2 & 2,31 & 2,31 & 2,31 & 2,31 & 0,43 \\
-		WTG3 & 2,31 & 2,31 & 2,31 & 2,31 & 2,31 \\
+		Unidad Nº 7 Solar Titan & 5 & 9,93 & 0 & 5 & 5 \\
+		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
+		WTG1 & 2,31 & 2,31 & 2,31 & 2,31 & 1,93 \\
+		WTG2 & 2,31 & 2,31 & 2,31 & 2,31 & 1,68 \\
+		WTG3 & 2,31 & 2,31 & 2,31 & 2,31 & 1,01 \\
 		\hline
-		P\'erdidas & 0,93 & 0,93 & 0,93 & 0,45 & 0,54 \\
+		P\'erdidas & 0,93 & 0,93 & 0,93 & 0,93 & 0,54 \\
 		ENS total & 0 & 0 & 0 & 0 & 0 \\
 		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
 		\hline
@@ -77,29 +78,29 @@
 	\setlength{\tabcolsep}{2pt}
 	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
 		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 6\\alm. 2}} \\
+		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
 		\cline{2-11}
-		 & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) \\
+		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
 		\hline
 		\multicolumn{11}{|c|}{L\'ineas} \\
 		\hline
 		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -7,8 & 36,83 & -7,8 & 36,83 & -7,8 & 36,83 & -4,77 & 22,5 & -5,72 & 26,99 \\
-		8-9 (PE) & -9,76 & 69,39 & -9,76 & 69,39 & -9,76 & 69,39 & -6,5 & 46,26 & -7,51 & 53,44 \\
-		9-10 (PE) & -9,79 & 69,66 & -9,79 & 69,66 & -9,79 & 69,66 & -6,53 & 46,44 & -7,54 & 53,64 \\
-		10-12 (WTG1-WTG2) & -6,54 & 46,55 & -6,54 & 46,55 & -6,54 & 46,55 & -6,54 & 46,55 & -4,69 & 33,33 \\
-		12-14 (WTG2-WTG3) & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 \\
+		7-8 (PE) & -7,8 & 36,83 & -7,8 & 36,83 & -7,8 & 36,83 & -7,8 & 36,83 & -5,72 & 26,99 \\
+		8-9 (PE) & -9,76 & 69,39 & -9,76 & 69,39 & -9,76 & 69,39 & -9,76 & 69,39 & -7,51 & 53,44 \\
+		9-10 (PE) & -9,79 & 69,66 & -9,79 & 69,66 & -9,79 & 69,66 & -9,79 & 69,66 & -7,54 & 53,64 \\
+		10-12 (WTG1-WTG2) & -6,54 & 46,55 & -6,54 & 46,55 & -6,54 & 46,55 & -6,54 & 46,55 & -4,65 & 33,08 \\
+		12-14 (WTG2-WTG3) & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -1,99 & 14,19 \\
 		\hline
 		\multicolumn{11}{|c|}{Transformadores} \\
 		\hline
 		1-2 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,26 \\
 		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
 		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -7,44 & 62,03 & -7,44 & 62,03 & -7,44 & 62,03 & -4,62 & 38,51 & -5,51 & 45,96 \\
+		1-7 & -7,44 & 62,03 & -7,44 & 62,03 & -7,44 & 62,03 & -7,44 & 62,03 & -5,51 & 45,96 \\
 		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & 0 & 0 & -2,88 & 71,99 \\
-		12-13 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -1,42 & 35,47 \\
-		14-15 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 \\
+		10-11 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2,92 & 72,9 \\
+		12-13 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2,67 & 66,67 \\
+		14-15 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2 & 50 \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -120,12 +121,12 @@
 		\hline
 		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 4.922,96 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 438,56 \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 3.814 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 454,5 \\
 		\multicolumn{2}{|c|}{Costo de reserva} & 157,5 \\
 		\multicolumn{2}{|c|}{Costo de reserva Up} & 142,01 \\
 		\multicolumn{2}{|c|}{Costo de reserva Dn} & 15,49 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 4.326,9 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 3.201,99 \\
 		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 2,2 MW \\
 		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 1,54 MW \\
 		\hline \hline
@@ -158,13 +159,14 @@
 		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
 		\hline
 		Unidad Nº 4 Solar Mars & 4 & 0 & 10 & 4 & 4 \\
-		Unidad Nº 7 Solar Titan & 8,73 & 12,73 & 0 & 10,73 & 7,68 \\
-		WTG1 & 1,54 & 1,54 & 1,54 & 0 & 1,34 \\
-		WTG2 & 1,54 & 1,54 & 1,54 & 1,54 & 1,34 \\
-		WTG3 & 1,54 & 1,54 & 1,54 & 1,54 & 0,93 \\
+		Unidad Nº 7 Solar Titan & 6 & 10 & 0 & 8,73 & 5 \\
+		Unidad Nº 8 GE10 & 2,73 & 2,73 & 2,73 & 0 & 2,73 \\
+		WTG1 & 1,54 & 1,54 & 1,54 & 1,54 & 1,53 \\
+		WTG2 & 1,54 & 1,54 & 1,54 & 1,54 & 0,68 \\
+		WTG3 & 1,54 & 1,54 & 1,54 & 1,54 & 1,34 \\
 		\hline
-		P\'erdidas & 0,43 & 0,43 & 0,4 & 0,22 & 0,28 \\
-		ENS total & 0 & 0 & 2,71 & 0 & 0 \\
+		P\'erdidas & 0,43 & 0,43 & 0,43 & 0,43 & 0,27 \\
+		ENS total & 0 & 0 & 0 & 0 & 0 \\
 		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
 		\hline
 	\end{tabular}
@@ -182,29 +184,29 @@
 	\setlength{\tabcolsep}{2pt}
 	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
 		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 6\\alm. 2}} \\
+		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
 		\cline{2-11}
-		 & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) \\
+		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
 		\hline
 		\multicolumn{11}{|c|}{L\'ineas} \\
 		\hline
-		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 7,83 & 23,8 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -4,79 & 22,6 & -4,79 & 22,6 & -4,79 & 22,6 & -2,7 & 12,76 & -3,86 & 18,21 \\
-		8-9 (PE) & -6,53 & 46,43 & -6,53 & 46,43 & -6,53 & 46,43 & -4,35 & 30,94 & -5,54 & 39,41 \\
-		9-10 (PE) & -6,55 & 46,6 & -6,55 & 46,6 & -6,55 & 46,6 & -4,37 & 31,07 & -5,56 & 39,57 \\
-		10-12 (WTG1-WTG2) & -4,38 & 31,12 & -4,38 & 31,12 & -4,38 & 31,12 & -4,38 & 31,12 & -3,58 & 25,44 \\
-		12-14 (WTG2-WTG3) & -2,19 & 15,57 & -2,19 & 15,57 & -2,19 & 15,57 & -2,19 & 15,57 & -1,58 & 11,26 \\
+		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
+		7-8 (PE) & -4,79 & 22,6 & -4,79 & 22,6 & -4,79 & 22,6 & -4,79 & 22,6 & -3,8 & 17,93 \\
+		8-9 (PE) & -6,53 & 46,43 & -6,53 & 46,43 & -6,53 & 46,43 & -6,53 & 46,43 & -5,48 & 38,96 \\
+		9-10 (PE) & -6,55 & 46,6 & -6,55 & 46,6 & -6,55 & 46,6 & -6,55 & 46,6 & -5,5 & 39,11 \\
+		10-12 (WTG1-WTG2) & -4,38 & 31,12 & -4,38 & 31,12 & -4,38 & 31,12 & -4,38 & 31,12 & -3,32 & 23,64 \\
+		12-14 (WTG2-WTG3) & -2,19 & 15,57 & -2,19 & 15,57 & -2,19 & 15,57 & -2,19 & 15,57 & -1,99 & 14,19 \\
 		\hline
 		\multicolumn{11}{|c|}{Transformadores} \\
 		\hline
-		1-2 & 4,85 & 24,26 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
+		1-2 & 4,85 & 24,26 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,26 \\
 		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 7,86 & 12,48 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -4,64 & 38,68 & -4,64 & 38,68 & -4,64 & 38,68 & -2,65 & 22,08 & -3,77 & 31,41 \\
-		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 7,81 & 23,67 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & 0 & 0 & -2 & 50 \\
-		12-13 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2 & 50 \\
-		14-15 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -1,59 & 39,67 \\
+		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
+		1-7 & -4,64 & 38,68 & -4,64 & 38,68 & -4,64 & 38,68 & -4,64 & 38,68 & -3,71 & 30,94 \\
+		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
+		10-11 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,74 \\
+		12-13 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -1,33 & 33,33 \\
+		14-15 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2 & 50 \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -225,23 +227,23 @@
 		\hline
 		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 1.466,6 \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 1.466,5 \\
 		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 380,7 \\
 		\multicolumn{2}{|c|}{Costo de reserva} & 163,74 \\
 		\multicolumn{2}{|c|}{Costo de reserva Up} & 152,57 \\
 		\multicolumn{2}{|c|}{Costo de reserva Dn} & 11,17 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 922,16 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 922,06 \\
 		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,8 MW \\
 		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,66 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
 		Unidad Nº 4 Solar Mars & 47,42 & 0 \\
-		Unidad Nº 7 Solar Titan & 43,05 & 0 \\
-		Unidad Nº 9 Solar Titan & 47,01 & 0 \\
+		Unidad Nº 7 Solar Titan & 33,33 & 0 \\
+		Unidad Nº 9 Solar Titan & 56,73 & 0 \\
 		WTG1 & 6,82 & 70,28 \\
-		WTG2 & 1,47 & 75,64 \\
-		WTG3 & 1,12 & 35,82 \\
+		WTG2 & 2,58 & 74,52 \\
+		WTG3 & 0 & 36,93 \\
 		\hline
 		\textbf{Reserva total PE} & \textbf{3,13} & \textbf{60,58} \\
 		\hline
@@ -263,12 +265,13 @@
 		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
 		\hline
 		Unidad Nº 4 Solar Mars & 4 & 0 & 8,74 & 4 & 4 \\
-		Unidad Nº 7 Solar Titan & 5 & 8,74 & 0 & 7,89 & 5 \\
-		WTG1 & 2,42 & 2,66 & 2,66 & 0 & 2,66 \\
-		WTG2 & 2,61 & 2,66 & 2,66 & 2,66 & 0,2 \\
-		WTG3 & 2,62 & 2,66 & 2,66 & 2,66 & 2,41 \\
+		Unidad Nº 7 Solar Titan & 5 & 8,74 & 0 & 5 & 5 \\
+		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
+		WTG1 & 2,42 & 2,66 & 2,66 & 2,34 & 1,52 \\
+		WTG2 & 2,57 & 2,66 & 2,66 & 2,66 & 2,2 \\
+		WTG3 & 2,66 & 2,66 & 2,66 & 2,66 & 1,53 \\
 		\hline
-		P\'erdidas & 1,17 & 1,24 & 1,24 & 0,59 & 0,69 \\
+		P\'erdidas & 1,17 & 1,24 & 1,24 & 1,17 & 0,68 \\
 		ENS total & 0 & 0 & 0 & 0 & 0 \\
 		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
 		\hline
@@ -287,29 +290,29 @@
 	\setlength{\tabcolsep}{2pt}
 	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
 		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 6\\alm. 2}} \\
+		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
 		\cline{2-11}
-		 & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) \\
+		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
 		\hline
 		\multicolumn{11}{|c|}{L\'ineas} \\
 		\hline
 		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -8,84 & 41,72 & -9,13 & 43,07 & -9,13 & 43,07 & -5,69 & 26,83 & -6,71 & 31,67 \\
-		8-9 (PE) & -10,9 & 77,51 & -11,21 & 79,75 & -11,21 & 79,75 & -7,48 & 53,19 & -8,57 & 60,92 \\
-		9-10 (PE) & -10,94 & 77,82 & -11,26 & 80,08 & -11,26 & 80,08 & -7,51 & 53,39 & -8,6 & 61,16 \\
-		10-12 (WTG1-WTG2) & -7,44 & 52,91 & -7,53 & 53,53 & -7,53 & 53,53 & -7,53 & 53,53 & -4,85 & 34,49 \\
-		12-14 (WTG2-WTG3) & -3,73 & 26,52 & -3,77 & 26,79 & -3,77 & 26,79 & -3,77 & 26,79 & -3,52 & 25,06 \\
+		7-8 (PE) & -8,84 & 41,72 & -9,13 & 43,07 & -9,13 & 43,07 & -8,84 & 41,72 & -6,71 & 31,67 \\
+		8-9 (PE) & -10,9 & 77,51 & -11,21 & 79,75 & -11,21 & 79,75 & -10,9 & 77,51 & -8,57 & 60,92 \\
+		9-10 (PE) & -10,94 & 77,82 & -11,26 & 80,08 & -11,26 & 80,08 & -10,94 & 77,82 & -8,6 & 61,16 \\
+		10-12 (WTG1-WTG2) & -7,44 & 52,91 & -7,53 & 53,53 & -7,53 & 53,53 & -7,53 & 53,53 & -5,97 & 42,48 \\
+		12-14 (WTG2-WTG3) & -3,77 & 26,79 & -3,77 & 26,79 & -3,77 & 26,79 & -3,77 & 26,79 & -2,66 & 18,9 \\
 		\hline
 		\multicolumn{11}{|c|}{Transformadores} \\
 		\hline
-		1-2 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
+		1-2 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,26 & 4,85 & 24,26 \\
 		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
 		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -8,38 & 69,8 & -8,63 & 71,95 & -8,63 & 71,95 & -5,48 & 45,7 & -6,45 & 53,72 \\
+		1-7 & -8,38 & 69,8 & -8,63 & 71,95 & -8,63 & 71,95 & -8,38 & 69,8 & -6,45 & 53,72 \\
 		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -3,55 & 88,79 & -3,79 & 94,63 & -3,79 & 94,63 & 0 & 0 & -3,79 & 94,63 \\
-		12-13 & -3,73 & 93,37 & -3,79 & 94,63 & -3,79 & 94,63 & -3,79 & 94,63 & -1,33 & 33,33 \\
-		14-15 & -3,75 & 93,67 & -3,79 & 94,63 & -3,79 & 94,63 & -3,79 & 94,63 & -3,54 & 88,48 \\
+		10-11 & -3,55 & 88,79 & -3,79 & 94,63 & -3,79 & 94,63 & -3,46 & 86,59 & -2,65 & 66,37 \\
+		12-13 & -3,7 & 92,42 & -3,79 & 94,63 & -3,79 & 94,63 & -3,79 & 94,63 & -3,33 & 83,33 \\
+		14-15 & -3,79 & 94,63 & -3,79 & 94,63 & -3,79 & 94,63 & -3,79 & 94,63 & -2,67 & 66,67 \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -317,7 +320,7 @@
 
 \begin{frame}{Múltiples escenarios}
 \begin{itemize}
-    \item 25 escenarios.
+    \item 20 escenarios.
 \end{itemize}
 
 \footnotesize
@@ -331,20 +334,20 @@
 		\hline
 		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 2.856,16 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 420,77 \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 2.806,36 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 426,03 \\
 		\multicolumn{2}{|c|}{Costo de reserva} & 172,72 \\
 		\multicolumn{2}{|c|}{Costo de reserva Up} & 154,36 \\
 		\multicolumn{2}{|c|}{Costo de reserva Dn} & 18,36 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 2.262,67 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 2.207,6 \\
 		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
 		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
 		Unidad Nº 4 Solar Mars & 56,94 & 6,94 \\
-		Unidad Nº 7 Solar Titan & 26,67 & 0 \\
-		Unidad Nº 9 Solar Titan & 51,63 & 0 \\
+		Unidad Nº 7 Solar Titan & 54,09 & 0 \\
+		Unidad Nº 9 Solar Titan & 24,21 & 0 \\
 		WTG1 & 14,29 & 52,66 \\
 		WTG2 & 14,29 & 52,66 \\
 		WTG3 & 14,29 & 52,66 \\
@@ -363,20 +366,21 @@
 	\centering
 	\caption{Despacho de generadores --- Caso 2, $\varepsilon=-0,04$ MW, $\eta=0,95$ MW}
 	\label{tab:despacho_caso2_w10}
-	\begin{tabular}{|c|c|c|c|c|c|}
+	\begin{tabular}{|c|c|c|c|c|c|c|}
 		\hline
-		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
-		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
+		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{5}{c|}{Contingencias (MW)} \\ \cline{3-7}
+		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{gen.\\4} & \makecell{alm.\\2} \\
 		\hline
-		Unidad Nº 4 Solar Mars & 4,31 & 0 & 10 & 4 & 4 \\
-		Unidad Nº 7 Solar Titan & 6,95 & 10,03 & 0 & 8,83 & 6,95 \\
-		WTG1 & 1,82 & 2,31 & 2,31 & 0 & 1,06 \\
-		WTG2 & 1,82 & 2,31 & 2,31 & 2,31 & 0,8 \\
-		WTG3 & 1,82 & 2,31 & 2,31 & 2,31 & 1,73 \\
+		Unidad Nº 4 Solar Mars & 4 & 0 & 9,53 & 4 & 4 & 4 \\
+		Unidad Nº 7 Solar Titan & 6,76 & 9,53 & 0 & 6,76 & 8,33 & 6,76 \\
+		Unidad Nº 8 GE10 & 0,5 & 0,5 & 0,5 & 0 & 0,5 & 0,5 \\
+		WTG1 & 1,82 & 2,31 & 2,31 & 1,99 & 0 & 1,73 \\
+		WTG2 & 1,82 & 2,31 & 2,31 & 2,31 & 2,31 & 0,45 \\
+		WTG3 & 1,82 & 2,31 & 2,31 & 1,73 & 2,31 & 1,06 \\
 		\hline
-		P\'erdidas & 0,65 & 0,9 & 0,9 & 0,44 & 0,39 \\
-		ENS total & 0 & 0 & 0,03 & 0 & 0 \\
-		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
+		P\'erdidas & 0,65 & 0,9 & 0,9 & 0,73 & 0,44 & 0,34 \\
+		ENS total & 0 & 0 & 0 & 0 & 0 & 0 \\
+		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -392,32 +396,32 @@
 	\label{tab:flujos_caso2_w10}
 	\setlength{\tabcolsep}{2pt}
 	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
-		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 6\\alm. 2}} \\
-		\cline{2-11}
-		 & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) \\
-		\hline
-		\multicolumn{11}{|c|}{L\'ineas} \\
-		\hline
-		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,52 & 31,97 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -6,36 & 30 & -7,69 & 36,31 & -7,69 & 36,31 & -4,69 & 22,14 & -4,63 & 21,85 \\
-		8-9 (PE) & -8,19 & 58,26 & -9,64 & 68,53 & -9,64 & 68,53 & -6,42 & 45,69 & -6,36 & 45,23 \\
-		9-10 (PE) & -8,22 & 58,48 & -9,67 & 68,8 & -9,67 & 68,8 & -6,45 & 45,86 & -6,38 & 45,4 \\
-		10-12 (WTG1-WTG2) & -5,49 & 39,07 & -6,46 & 45,97 & -6,46 & 45,97 & -6,46 & 45,97 & -4,4 & 31,29 \\
-		12-14 (WTG2-WTG3) & -2,75 & 19,55 & -3,23 & 23,01 & -3,23 & 23,01 & -3,23 & 23,01 & -2,66 & 18,9 \\
-		\hline
-		\multicolumn{11}{|c|}{Transformadores} \\
-		\hline
-		1-2 & 4,85 & 24,25 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,26 & 4,85 & 24,26 \\
-		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,56 & 16,77 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -6,12 & 50,96 & -7,35 & 61,22 & -7,35 & 61,22 & -4,55 & 37,92 & -4,49 & 37,44 \\
-		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,49 & 31,78 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & 0 & 0 & -2 & 50 \\
-		12-13 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -3,25 & 81,2 & -1,75 & 43,72 \\
-		14-15 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -3,25 & 81,2 & -2,67 & 66,67 \\
-		\hline
-	\end{tabular}
+    	\hline
+    	\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
+    	\cline{2-11}
+    	 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
+    	\hline
+    	\multicolumn{11}{|c|}{L\'ineas} \\
+    	\hline
+    	4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
+    	7-8 (PE) & -6,36 & 30 & -7,69 & 36,31 & -7,69 & 36,31 & -6,89 & 32,51 & -4,3 & 20,31 \\
+    	8-9 (PE) & -8,19 & 58,26 & -9,64 & 68,53 & -9,64 & 68,53 & -8,76 & 62,28 & -6,01 & 42,77 \\
+    	9-10 (PE) & -8,22 & 58,48 & -9,67 & 68,8 & -9,67 & 68,8 & -8,79 & 62,51 & -6,04 & 42,93 \\
+    	10-12 (WTG1-WTG2) & -5,49 & 39,07 & -6,46 & 45,97 & -6,46 & 45,97 & -5,89 & 41,88 & -3,39 & 24,09 \\
+    	12-14 (WTG2-WTG3) & -2,75 & 19,55 & -3,23 & 23,01 & -3,23 & 23,01 & -2,66 & 18,9 & -1,99 & 14,19 \\
+    	\hline
+    	\multicolumn{11}{|c|}{Transformadores} \\
+    	\hline
+    	1-2 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,26 & 4,85 & 24,26 \\
+    	1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
+    	1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
+    	1-7 & -6,12 & 50,96 & -7,35 & 61,22 & -7,35 & 61,22 & -6,62 & 55,13 & -4,19 & 34,88 \\
+    	5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
+    	10-11 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -2,93 & 73,32 & -2,67 & 66,67 \\
+    	12-13 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -3,25 & 81,2 & -1,4 & 34,91 \\
+    	14-15 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -2,67 & 66,67 & -2 & 50 \\
+    	\hline
+    \end{tabular}
 \end{table}
 \end{frame}
 
@@ -433,25 +437,25 @@
 		\hline
 		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 2.090,81 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 414,68 \\
-		\multicolumn{2}{|c|}{Costo de reserva} & 204,54 \\
-		\multicolumn{2}{|c|}{Costo de reserva Up} & 193,84 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,7 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.471,59 \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 2.090,96 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 413,42 \\
+		\multicolumn{2}{|c|}{Costo de reserva} & 206,52 \\
+		\multicolumn{2}{|c|}{Costo de reserva Up} & 195,79 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,73 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.471,01 \\
 		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
 		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
-		Unidad Nº 4 Solar Mars & 42,65 & 0 \\
-		Unidad Nº 7 Solar Titan & 32,84 & 0 \\
-		Unidad Nº 9 Solar Titan & 46,07 & 0 \\
-		WTG1 & 8,59 & 58,37 \\
-		WTG2 & 18,14 & 48,81 \\
-		WTG3 & 0 & 66,96 \\
+		Unidad Nº 4 Solar Mars & 43,39 & 0 \\
+		Unidad Nº 7 Solar Titan & 32,88 & 0 \\
+		Unidad Nº 9 Solar Titan & 46,57 & 0 \\
+		WTG1 & 0 & 66,96 \\
+		WTG2 & 24,03 & 42,92 \\
+		WTG3 & 0 & 64,68 \\
 		\hline
-		\textbf{Reserva total PE} & \textbf{8,91} & \textbf{58,04} \\
+		\textbf{Reserva total PE} & \textbf{8,01} & \textbf{58,19} \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -469,13 +473,14 @@
 		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
 		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
 		\hline
-		Unidad Nº 4 Solar Mars & 5,67 & 0 & 9,93 & 5,67 & 5,67 \\
-		Unidad Nº 7 Solar Titan & 5,01 & 9,93 & 0 & 7,09 & 5,01 \\
-		WTG1 & 2,01 & 2,31 & 2,31 & 0 & 1,08 \\
-		WTG2 & 1,68 & 2,31 & 2,31 & 2,31 & 1,01 \\
-		WTG3 & 2,31 & 2,31 & 2,31 & 2,31 & 1,68 \\
+		Unidad Nº 4 Solar Mars & 5,59 & 0 & 9,93 & 5,59 & 5,59 \\
+		Unidad Nº 7 Solar Titan & 5 & 9,93 & 0 & 5 & 5 \\
+		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
+		WTG1 & 2,31 & 2,31 & 2,31 & 2,11 & 1,68 \\
+		WTG2 & 1,48 & 2,31 & 2,31 & 2,31 & 1,68 \\
+		WTG3 & 2,31 & 2,31 & 2,31 & 1,68 & 0,51 \\
 		\hline
-		P\'erdidas & 0,75 & 0,93 & 0,93 & 0,45 & 0,43 \\
+		P\'erdidas & 0,76 & 0,93 & 0,93 & 0,76 & 0,44 \\
 		ENS total & 0 & 0 & 0 & 0 & 0 \\
 		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
 		\hline
@@ -493,33 +498,32 @@
 	\setlength{\tabcolsep}{2pt}
 	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
 		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 6\\alm. 2}} \\
+		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
 		\cline{2-11}
-		 & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) \\
+		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
 		\hline
 		\multicolumn{11}{|c|}{L\'ineas} \\
 		\hline
 		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -6,98 & 32,95 & -7,8 & 36,83 & -7,8 & 36,83 & -4,77 & 22,5 & -4,93 & 23,26 \\
-		8-9 (PE) & -8,85 & 62,98 & -9,76 & 69,39 & -9,76 & 69,39 & -6,5 & 46,26 & -6,68 & 47,48 \\
-		9-10 (PE) & -8,89 & 63,22 & -9,79 & 69,66 & -9,79 & 69,66 & -6,53 & 46,44 & -6,7 & 47,66 \\
-		10-12 (WTG1-WTG2) & -5,93 & 42,16 & -6,54 & 46,55 & -6,54 & 46,55 & -6,54 & 46,55 & -4,65 & 33,07 \\
-		12-14 (WTG2-WTG3) & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -2,66 & 18,9 \\
+		7-8 (PE) & -7,07 & 33,36 & -7,8 & 36,83 & -7,8 & 36,83 & -7,07 & 33,36 & -5,01 & 23,67 \\
+		8-9 (PE) & -8,95 & 63,63 & -9,76 & 69,39 & -9,76 & 69,39 & -8,95 & 63,63 & -6,77 & 48,13 \\
+		9-10 (PE) & -8,98 & 63,87 & -9,79 & 69,66 & -9,79 & 69,66 & -8,98 & 63,87 & -6,79 & 48,31 \\
+		10-12 (WTG1-WTG2) & -5,73 & 40,73 & -6,54 & 46,55 & -6,54 & 46,55 & -5,93 & 42,17 & -4,15 & 29,49 \\
+		12-14 (WTG2-WTG3) & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -2,66 & 18,9 & -1,49 & 10,6 \\
 		\hline
 		\multicolumn{11}{|c|}{Transformadores} \\
 		\hline
 		1-2 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
 		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
 		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -6,7 & 55,86 & -7,44 & 62,03 & -7,44 & 62,03 & -4,62 & 38,51 & -4,77 & 39,78 \\
+		1-7 & -6,78 & 56,53 & -7,44 & 62,03 & -7,44 & 62,03 & -6,78 & 56,53 & -4,85 & 40,45 \\
 		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,99 & 74,86 & -3,29 & 82,22 & -3,29 & 82,22 & 0 & 0 & -2,07 & 51,74 \\
-		12-13 & -2,67 & 66,67 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2 & 50 \\
-		14-15 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2,67 & 66,67 \\
+		10-11 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,09 & 77,13 & -2,67 & 66,67 \\
+		12-13 & -2,46 & 61,61 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2,67 & 66,67 \\
+		14-15 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2,67 & 66,67 & -1,49 & 37,33 \\
 		\hline
 	\end{tabular}
 \end{table}
-
 \end{frame}
 
 \begin{frame}{Reducir costo de combustible a $0.65\cdot a_{g}$}
@@ -534,25 +538,25 @@
 		\hline
 		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 1.876,7 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 337,63 \\
-		\multicolumn{2}{|c|}{Costo de reserva} & 146,88 \\
-		\multicolumn{2}{|c|}{Costo de reserva Up} & 136,18 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,7 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.392,2 \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 1.876,99 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 336,81 \\
+		\multicolumn{2}{|c|}{Costo de reserva} & 148,23 \\
+		\multicolumn{2}{|c|}{Costo de reserva Up} & 137,5 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,73 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.391,95 \\
 		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
 		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
-		Unidad Nº 4 Solar Mars & 42,65 & 0 \\
-		Unidad Nº 7 Solar Titan & 33,33 & 0 \\
-		Unidad Nº 9 Solar Titan & 45,57 & 0 \\
-		WTG1 & 8,64 & 58,31 \\
+		Unidad Nº 4 Solar Mars & 43,39 & 0 \\
+		Unidad Nº 7 Solar Titan & 32,88 & 0 \\
+		Unidad Nº 9 Solar Titan & 46,57 & 0 \\
+		WTG1 & 5,94 & 61,02 \\
 		WTG2 & 0 & 66,96 \\
-		WTG3 & 18,14 & 48,81 \\
+		WTG3 & 18,14 & 46,54 \\
 		\hline
-		\textbf{Reserva total PE} & \textbf{8,93} & \textbf{58,03} \\
+		\textbf{Reserva total PE} & \textbf{8,03} & \textbf{58,17} \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -571,13 +575,14 @@
 		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
 		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
 		\hline
-		Unidad Nº 4 Solar Mars & 5,67 & 0 & 9,93 & 5,67 & 5,67 \\
-		Unidad Nº 7 Solar Titan & 5,01 & 9,93 & 0 & 7,09 & 5,01 \\
-		WTG1 & 2,01 & 2,31 & 2,31 & 0 & 1,01 \\
-		WTG2 & 2,31 & 2,31 & 2,31 & 2,31 & 2,31 \\
-		WTG3 & 1,68 & 2,31 & 2,31 & 2,31 & 0,46 \\
+		Unidad Nº 4 Solar Mars & 5,59 & 0 & 9,93 & 5,59 & 5,59 \\
+		Unidad Nº 7 Solar Titan & 5 & 9,93 & 0 & 5 & 5 \\
+		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
+		WTG1 & 2,11 & 2,31 & 2,31 & 2,11 & 1,68 \\
+		WTG2 & 2,31 & 2,31 & 2,31 & 1,68 & 0,51 \\
+		WTG3 & 1,68 & 2,31 & 2,31 & 2,31 & 1,68 \\
 		\hline
-		P\'erdidas & 0,74 & 0,93 & 0,93 & 0,45 & 0,43 \\
+		P\'erdidas & 0,76 & 0,93 & 0,93 & 0,76 & 0,44 \\
 		ENS total & 0 & 0 & 0 & 0 & 0 \\
 		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
 		\hline
@@ -596,29 +601,29 @@
 	\setlength{\tabcolsep}{2pt}
 	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
 		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 6\\alm. 2}} \\
+		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
 		\cline{2-11}
-		 & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) & Flujo (MW) & Carg (\%) \\
+		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
 		\hline
 		\multicolumn{11}{|c|}{L\'ineas} \\
 		\hline
 		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -6,98 & 32,95 & -7,8 & 36,83 & -7,8 & 36,83 & -4,77 & 22,5 & -4,93 & 23,26 \\
-		8-9 (PE) & -8,85 & 62,98 & -9,76 & 69,39 & -9,76 & 69,39 & -6,5 & 46,26 & -6,68 & 47,48 \\
-		9-10 (PE) & -8,89 & 63,22 & -9,79 & 69,66 & -9,79 & 69,66 & -6,53 & 46,44 & -6,7 & 47,66 \\
-		10-12 (WTG1-WTG2) & -5,93 & 42,17 & -6,54 & 46,55 & -6,54 & 46,55 & -6,54 & 46,55 & -4,72 & 33,56 \\
-		12-14 (WTG2-WTG3) & -2,66 & 18,9 & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -1,44 & 10,28 \\
+		7-8 (PE) & -7,07 & 33,36 & -7,8 & 36,83 & -7,8 & 36,83 & -7,07 & 33,36 & -5,01 & 23,67 \\
+		8-9 (PE) & -8,95 & 63,63 & -9,76 & 69,39 & -9,76 & 69,39 & -8,95 & 63,63 & -6,77 & 48,13 \\
+		9-10 (PE) & -8,98 & 63,87 & -9,79 & 69,66 & -9,79 & 69,66 & -8,98 & 63,87 & -6,79 & 48,31 \\
+		10-12 (WTG1-WTG2) & -5,93 & 42,17 & -6,54 & 46,55 & -6,54 & 46,55 & -5,93 & 42,16 & -4,15 & 29,49 \\
+		12-14 (WTG2-WTG3) & -2,66 & 18,9 & -3,28 & 23,29 & -3,28 & 23,29 & -3,28 & 23,29 & -2,66 & 18,9 \\
 		\hline
 		\multicolumn{11}{|c|}{Transformadores} \\
 		\hline
-		1-2 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
+		1-2 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,26 \\
 		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
 		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -6,7 & 55,86 & -7,44 & 62,03 & -7,44 & 62,03 & -4,62 & 38,51 & -4,77 & 39,78 \\
+		1-7 & -6,78 & 56,53 & -7,44 & 62,03 & -7,44 & 62,03 & -6,78 & 56,53 & -4,85 & 40,45 \\
 		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,99 & 74,81 & -3,29 & 82,22 & -3,29 & 82,22 & 0 & 0 & -2 & 50 \\
-		12-13 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 \\
-		14-15 & -2,67 & 66,67 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -1,45 & 36,19 \\
+		10-11 & -3,09 & 77,13 & -3,29 & 82,22 & -3,29 & 82,22 & -3,09 & 77,17 & -2,67 & 66,67 \\
+		12-13 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2,67 & 66,67 & -1,49 & 37,37 \\
+		14-15 & -2,67 & 66,67 & -3,29 & 82,22 & -3,29 & 82,22 & -3,29 & 82,22 & -2,67 & 66,67 \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -636,19 +641,18 @@
 \begin{tabular}{|c|c|r|r|r|r|r|r|r|r|}
 \hline
 Caso & Opt. & $Cto^{tot}$ & $Cto^{pre}$ & \multicolumn{1}{c|}{$Cto^{post}$} & $Cto^{res}$ & $Cto^{RUp}$ & $Cto^{RDn}$ & $R^{Up}$ & $R^{Dn}$ \\ \hline
-\multirow{2}{*}{Base} & pre+post & 2.190,02 & 407,41 & 1.624,56 & 158,04 & 147,16 & 10,88 & 0 & 59,02 \\
- & pre & 2.239,95 & 417,1 & 1.675,08 & 147,77 & 137,11 & 10,67 & 7,07 & 57,86 \\ \hline
+\multirow{2}{*}{Base} & pre+post & 2.027,45 & 402,52 & 1.465,16 & 159,77 & 148,8 & 10,97 & 0 & 59,47 \\
+ & pre & 2.074,51 & 414,68 & 1.512,95 & 146,88 & 136,18 & 10,7 & 8,93 & 58,03 \\ \hline
 \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento capacidad\\ PE a 12 MW\end{tabular}} & pre+post & 1.466,6 & 380,7 & 922,16 & 163,74 & 152,57 & 11,17 & 3,13 & 60,58 \\
  & pre & 1.515,84 & 399,68 & 973,92 & 142,25 & 131,39 & 10,86 & 18,23 & 58,87 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Múltiples escenarios\\ (25)\end{tabular}} & pre+post & 2.969,31 & 420,42 & 2.374,26 & 174,63 & 157,45 & 17,18 & 10,82 & 54,11 \\
- & pre & 2.985,53 & 420,42 & 2.390,65 & 174,45 & 157,44 & 17,01 & 10,83 & 54,1 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento cto. reserva \\ térmicas a $1\cdot a_{g}$\end{tabular}} & pre+post & 2.252,74 & 417,1 & 1.629,66 & 205,98 & 195,3 & 10,67 & 7,04 & 57,88 \\
- & pre & 2.300,93 & 417,1 & 1.677,85 & 205,98 & 195,3 & 10,67 & 7,05 & 57,87 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Reducción costo de comb. \\ a $0.65\cdot a_{g}$\end{tabular}} & pre+post & 2.038,18 & 339,9 & 1.549,99 & 148,29 & 137,61 & 10,68 & 6,7 & 57,93 \\
- & pre & 2.066,68 & 340,22 & 1.578,69 & 147,77 & 137,11 & 10,67 & 7,07 & 57,86 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Múltiples escenarios\\ (25)\end{tabular}} & pre+post & 2.856,16 & 420,77 & 2.262,67 & 172,72 & 154,36 & 18,36 & 14,29 & 52,66 \\
+ & pre & 2.874,39 & 420,77 & 2.280,9 & 172,72 & 154,36 & 18,36 & 14,29 & 52,66 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento cto. reserva \\ térmicas a $1\cdot a_{g}$\end{tabular}} & pre+post & 2.090,81 & 414,68 & 1.471,59 & 204,54 & 193,84 & 10,7 & 8,91 & 58,04 \\
+ & pre & 2.132,82 & 414,68 & 1.513,6 & 204,54 & 193,83 & 10,7 & 8,9 & 58,05 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Reducción costo de comb. \\ a $0.65\cdot a_{g}$\end{tabular}} & pre+post & 1.876,7 & 337,63 & 1.392,2 & 146,88 & 136,18 & 10,7 & 8,93 & 58,03 \\
+ & pre & 1.904,71 & 337,63 & 1.420,21 & 146,88 & 136,18 & 10,7 & 8,93 & 58,03 \\ \hline
 \end{tabular}
 \end{table}
-
 \end{frame}
 
 \begin{frame}{}
@@ -663,19 +667,18 @@ Caso & Opt. & $Cto^{tot}$ & $Cto^{pre}$ & \multicolumn{1}{c|}{$Cto^{post}$} & $C
 \begin{tabular}{|c|c|r|r|r|r|r|r|r|r|}
 \hline
 Caso & Opt. & $Cto^{tot}$ & $Cto^{pre}$ & \multicolumn{1}{c|}{$Cto^{post}$} & $Cto^{res}$ & $Cto^{RUp}$ & $Cto^{RDn}$ & $R^{Up}$ & $R^{Dn}$ \\ \hline
-\multirow{2}{*}{Base} & pre+post & 2.144,91 & 410,1 & 1.576,77 & 158,04 & 147,16 & 10,88 & 0 & 59,02 \\
- & pre & 2.192,93 & 419,79 & 1.625,36 & 147,77 & 137,11 & 10,67 & 7,07 & 57,85 \\ \hline
+\multirow{2}{*}{Base} & pre+post & 2.027,49 & 402,52 & 1.465,09 & 159,87 & 148,8 & 11,07 & 0 & 60,03 \\
+ & pre & 2.081,02 & 414,93 & 1.519,31 & 146,77 & 135,92 & 10,85 & 9,12 & 57,84 \\ \hline
 \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento capacidad\\ PE a 12 MW\end{tabular}} & pre+post & 1.466,52 & 380,7 & 922,08 & 163,75 & 152,57 & 11,17 & 3,14 & 60,58 \\
  & pre & 1.525,85 & 399,69 & 983,92 & 142,24 & 131,38 & 10,86 & 18,21 & 58,89 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Múltiples escenarios\\ (25)\end{tabular}} & pre+post & 2.863,99 & 424,51 & 2.265,02 & 174,45 & 157,44 & 17,01 & 10,83 & 54,1 \\
- & pre & 2.884,74 & 424,51 & 2.285,78 & 174,45 & 157,44 & 17,01 & 10,83 & 54,1 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento cto. reserva \\ térmicas a $1\cdot a_{g}$\end{tabular}} & pre+post & 2.207,72 & 419,8 & 1.581,94 & 205,98 & 195,31 & 10,67 & 7,07 & 57,85 \\
- & pre & 2.258,57 & 419,83 & 1.632,76 & 205,98 & 195,31 & 10,67 & 7,07 & 57,86 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Reducción costo de comb. \\ a $0.65\cdot a_{g}$\end{tabular}} & pre+post & 1.994,24 & 343,46 & 1.503 & 147,77 & 137,11 & 10,67 & 7,07 & 57,86 \\
- & pre & 2.026,07 & 343,46 & 1.534,83 & 147,77 & 137,11 & 10,67 & 7,07 & 57,86 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Múltiples escenarios\\ (25)\end{tabular}} & pre+post & 2.790,16 & 424,44 & 2.192,99 & 172,72 & 154,36 & 18,36 & 14,29 & 52,66 \\
+ & pre & 2.812,23 & 424,4 & 2.215,1 & 172,72 & 154,36 & 18,36 & 14,29 & 52,66 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento cto. reserva \\ térmicas a $1\cdot a_{g}$\end{tabular}} & pre+post & 2.091,09 & 405,54 & 1.466,73 & 218,82 & 207,89 & 10,93 & 2,25 & 59,26 \\
+ & pre & 2.137,75 & 414,68 & 1.518,53 & 204,54 & 193,83 & 10,7 & 8,9 & 58,05 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Reducción costo de comb. \\ a $0.65\cdot a_{g}$\end{tabular}} & pre+post & 1.876,91 & 337,63 & 1.392,4 & 146,88 & 136,18 & 10,7 & 8,91 & 58,05 \\
+ & pre & 1.908,15 & 337,63 & 1.423,65 & 146,88 & 136,18 & 10,7 & 8,93 & 58,03 \\ \hline
 \end{tabular}
 \end{table}
-
 \end{frame}
 
 \begin{frame}{Comparación formulación clásica versus SF (opt. costos pre+post)}
@@ -690,16 +693,16 @@ Caso & Opt. & $Cto^{tot}$ & $Cto^{pre}$ & \multicolumn{1}{c|}{$Cto^{post}$} & $C
 \begin{tabular}{|c|c|r|r|r|r|r|r|r|r|}
 \hline
 Caso & Form. & $Cto^{tot}$ & $Cto^{pre}$ & \multicolumn{1}{c|}{$Cto^{post}$} & $Cto^{res}$ & $Cto^{RUp}$ & $Cto^{RDn}$ & $R^{Up}$ & $R^{Dn}$ \\ \hline
-\multirow{2}{*}{Base} & clásica & 2.190,02 & 407,41 & 1.624,56 & 158,04 & 147,16 & 10,88 & 0 & 59,02 \\
- & SF & 2.144,91 & 410,1 & 1.576,77 & 158,04 & 147,16 & 10,88 & 0 & 59,02 \\ \hline
+\multirow{2}{*}{Base} & clásica & 2.027,45 & 402,52 & 1.465,16 & 159,77 & 148,8 & 10,97 & 0 & 59,47 \\
+ & SF & 2.027,49 & 402,52 & 1.465,09 & 159,87 & 148,8 & 11,07 & 0 & 60,03 \\ \hline
 \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento capacidad\\ PE a 12 MW\end{tabular}} & clásica & 1.466,6 & 380,7 & 922,16 & 163,74 & 152,57 & 11,17 & 3,13 & 60,58 \\
  & SF & 1.466,52 & 380,7 & 922,08 & 163,75 & 152,57 & 11,17 & 3,14 & 60,58 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Múltiples escenarios\\ (25)\end{tabular}} & clásica & 2.969,31 & 420,42 & 2.374,26 & 174,63 & 157,45 & 17,18 & 10,82 & 54,11 \\
- & SF & 2.863,99 & 424,51 & 2.265,02 & 174,45 & 157,44 & 17,01 & 10,83 & 54,1 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento cto. reserva \\ térmicas a $1\cdot a_{g}$\end{tabular}} & clásica & 2.252,74 & 417,1 & 1.629,66 & 205,98 & 195,3 & 10,67 & 7,04 & 57,88 \\
- & SF & 2.207,72 & 419,8 & 1.581,94 & 205,98 & 195,31 & 10,67 & 7,07 & 57,85 \\ \hline
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Reducción costo de comb. \\ a $0.65\cdot a_{g}$\end{tabular}} & clásica & 2.038,18 & 339,9 & 1.549,99 & 148,29 & 137,61 & 10,68 & 6,7 & 57,93 \\
- & SF & 1.994,24 & 343,46 & 1.503 & 147,77 & 137,11 & 10,67 & 7,07 & 57,86 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Múltiples escenarios\\ (25)\end{tabular}} & clásica & 2.856,16 & 420,77 & 2.262,67 & 172,72 & 154,36 & 18,36 & 14,29 & 52,66 \\
+ & SF & 2.790,16 & 424,44 & 2.192,99 & 172,72 & 154,36 & 18,36 & 14,29 & 52,66 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Aumento cto. reserva \\ térmicas a $1\cdot a_{g}$\end{tabular}} & clásica & 2.090,81 & 414,68 & 1.471,59 & 204,54 & 193,84 & 10,7 & 8,91 & 58,04 \\
+ & SF & 2.091,09 & 405,54 & 1.466,73 & 218,82 & 207,89 & 10,93 & 2,25 & 59,26 \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Reducción costo de comb. \\ a $0.65\cdot a_{g}$\end{tabular}} & clásica & 1.876,7 & 337,63 & 1.392,2 & 146,88 & 136,18 & 10,7 & 8,93 & 58,03 \\
+ & SF & 1.876,91 & 337,63 & 1.392,4 & 146,88 & 136,18 & 10,7 & 8,91 & 58,05 \\ \hline
 \end{tabular}
-\end{table}    
+\end{table}
 \end{frame}
