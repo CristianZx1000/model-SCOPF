@@ -9,7 +9,7 @@ import warnings
 
 warnings.filterwarnings("ignore", category = DeprecationWarning)
 
-import sys
+import sys, os
 from gurobipy import *
 from scipy.sparse import csr_matrix as sparse
 from numpy import pi, array, ones, zeros, arange, ix_, r_, flatnonzero as finddiag, dot as mult
@@ -19,31 +19,48 @@ import pandas as pd
 import time
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import pickle
+from scipy.stats import truncnorm
 
-import case_SM_PA_V3 as mpc # sep_SM_PA_v5.pdf
+import case_SM_PA_V4 as mpc # sep_SM_PA_v5.pdf
+import mod_pa_V2 as mpa
 
-# Enlazar python con PowerFactory # llamar al sistema operativo
-import os;
-os.environ["PATH"]=r"D:\Program Files\DIgSILENT\PowerFactory 2021 SP2"+os.environ["PATH"]
+# === Configuración caché ===
+SCENARIOS_CACHE = "scenarios_data.pkl"
+usar_cache = True  # False: para leer desde PF y actualizar caché
 
-# Importar la aplicación # tener acceso desde la ruta donde esta powerfactory
-import sys
-sys.path.append(r"D:\Program Files\DIgSILENT\PowerFactory 2021 SP2\Python\3.9")
+if not usar_cache:
+    # Enlazar python con PowerFactory # llamar al sistema operativo
+    os.environ["PATH"] = r"D:\Program Files\DIgSILENT\PowerFactory 2021 SP2" + os.environ["PATH"]
 
-# Importar la aplicación # importar el módulo que da acceso a la aplicación
-import powerfactory as pf
+    # Importar la aplicación # tener acceso desde la ruta donde esta powerfactory
+    sys.path.append(r"D:\Program Files\DIgSILENT\PowerFactory 2021 SP2\Python\3.9")
 
-app=pf.GetApplication()
-#app.Show() # abrir pf en Modo Engine
- 
-# Activar el proyecto
-user =app.GetCurrentUser()                # abre el usuario
-project=app.ActivateProject('BD SM Punta Arenas 2023 ECF y EDAC wind') # abre el archivo pfd
-#project=app.ActivateProject('BD SM Punta Arenas 2023 ECF y EDAC AGC')
-prj = app.GetActiveProject()              # activar el proyecto
+    # Importar la aplicación # importar el módulo que da acceso a la aplicación
+    import powerfactory as pf
 
+    app = pf.GetApplication()
+    
+    # Activar el proyecto
+    user = app.GetCurrentUser()                # abre el usuario
+    project = app.ActivateProject('BD SM Punta Arenas 2023 ECF y EDAC wind') # abre el archivo pfd
+    #project = app.ActivateProject('BD SM Punta Arenas 2023 ECF y EDAC V2')
+    prj = app.GetActiveProject()              # activar el proyecto
 # 1: Obtener los datos de la red
-scenarios_data = mpc.get_scenarios_data(app, prj)
+if usar_cache and os.path.exists(SCENARIOS_CACHE):
+    with open(SCENARIOS_CACHE, "rb") as f:
+        scenarios_data = pickle.load(f)
+else:
+    scenarios_data = mpc.get_scenarios_data(app, prj)
+    with open(SCENARIOS_CACHE, "wb") as f:
+        pickle.dump(scenarios_data, f)
+
+# === Parámetros de costos ===
+u_term = 1
+u_wtg  = 0.1
+cdn    = 1
+
+scenarios_data = mpc.compute_costs(scenarios_data, cdn=cdn, u_term=u_term, u_wtg=u_wtg)
 
 gen_agc = scenarios_data["sistema"]["gen_agc_info"]
 
@@ -55,44 +72,54 @@ dicc_gen = {name: i for i, name in enumerate(dicc_gen_agc.keys())}
 
 ng_g = len(dicc_gen_agc)
 
+# True: opt. pre + post, False: opt. solo pre
+opt_post = True
+
+# mod. pmax WTGs, 3.45 --> 4 MW 
+mod_pmax = False
+
 #⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡
 # === Modelo de la incertidumbre ===
 
-p_fore = 3.45 #*4/3.45  #3.45  # pronóstico #*4
+p_fore = 3.3 # 3.45 # pronóstico
+if mod_pmax:
+    p_fore = 3.8
+
 alfa = 0.1          # factor de la desviación estándar
 
 sigma = alfa * p_fore  # desviación estándar
 zeta = 3 * sigma       # límite de desviación
 p_VUL = p_fore - zeta  # límite de la parte despachable
 
-# Parámetros escenarios de epsilon
-from scipy.stats import truncnorm
-rng = np.random.default_rng(42)     # semilla
-# Normal truncada en [-3, 3]
-a, b = -3, 3
-u = truncnorm.rvs(a, b, loc=0, scale=1, size=6, random_state=rng)
-# Normalizar a [-1,1]
-numeros = u / 3 # u_norm
-
-#numeros = numeros[numeros <= 0.42]
-print(len(numeros))
-print("Media:", round(np.mean(numeros),5), "Std (poblacional):", round(np.std(numeros),5), 
-      "Std (muestral):", round(np.std(numeros, ddof=1),5))
-indice_fore = np.argmin(np.abs(numeros))
-valor_fore = numeros[indice_fore]
-print("Valor cercano al esperado", indice_fore, valor_fore)
-idx_min = np.argmin(np.abs(numeros + 1))
-val_min = numeros[idx_min]
-print("Valor mínimo", idx_min, val_min)
-idx_max = np.argmin(np.abs(numeros - 1))
-val_max = numeros[idx_max]
-print("Valor máximo", idx_max, val_max)
-
+# Valor esperado
 exp_val = True
-if not exp_val:
-    epsilon_list = numeros * zeta
+
+if exp_val:
+    epsilon_list = np.array([0]) * zeta
 else:
-    epsilon_list = np.array([0]) * zeta # factible si epsilon < ? / L=2 --> 0.54, L=6 --> 0.42
+    # Parámetros escenarios de epsilon
+    rng = np.random.default_rng(42)     # semilla
+    # Normal truncada en [-3, 3]
+    a, b = -3, 3
+    u = truncnorm.rvs(a, b, loc=0, scale=1, size=10, random_state=rng)
+    # Normalizar a [-1,1]
+    numeros = u / 3 # u_norm
+
+    #numeros = numeros[numeros <= 0.42]
+    print(len(numeros))
+    print("Media:", round(np.mean(numeros),5), "Std (poblacional):", round(np.std(numeros),5), 
+        "Std (muestral):", round(np.std(numeros, ddof=1),5))
+    indice_fore = np.argmin(np.abs(numeros))
+    valor_fore = numeros[indice_fore]
+    print("Valor cercano al esperado", indice_fore, valor_fore)
+    idx_min = np.argmin(np.abs(numeros + 1))
+    val_min = numeros[idx_min]
+    print("Valor mínimo", idx_min, val_min)
+    idx_max = np.argmin(np.abs(numeros - 1))
+    val_max = numeros[idx_max]
+    print("Valor máximo", idx_max, val_max)
+
+    epsilon_list = numeros * zeta
 
 n_w = len(epsilon_list)
 
@@ -114,12 +141,9 @@ Cop = LinExpr()
 Cto_up_g = np.zeros(ng_g)
 Cto_dn_g = np.zeros(ng_g)
 
-# On/off
-g_s = True
-
 casos = list(range(1, 7))
 #casos = [4]             # solo un caso
-casos_ejecutar = [u for u in casos if u != 3] # Nota: caso 3 se ignora, es igual al caso 2, también se omite en case_SM_PA_V3.py
+casos_ejecutar = [u for u in casos if u != 3] # Nota: caso 3 se ignora, es igual al caso 2, también se omite en case_SM_PA_V4.py
 n_casos = len(casos_ejecutar)
 peso_c = 1 / n_casos if n_casos > 1 else 1.0
 
@@ -129,8 +153,6 @@ vars_list = []
 for u in casos_ejecutar:
     # Seleccionar el escenario
     nombre_escenario = f"CASO {u}"
-    escenario = prj.GetContents(nombre_escenario, 1)[0]
-    escenario.Activate()
 
     # Calcular X equivalente con tap
     X_eq = mpc.calculate_reduced_X_trafo_7(scenarios_data, nombre_escenario)
@@ -154,12 +176,9 @@ for u in casos_ejecutar:
     # Solo 3 unidades son eólicas en todos los casos, son los últimos tres generadores
     idx_erv = range(ng-3,ng)# [ng-3, ng-2, ng-1]
 
-    # for kr in idx_erv:
-    #     Pmax[kr] *= 1#*4/3.45#4
-    # for krt in range(ng):
-    #     if krt not in idx_erv:
-    #         Pmax[krt] *= 1
-    #         Pmin[krt] *= 1#0.25
+    if mod_pmax:
+        for kr in idx_erv:
+            Pmax[kr] *= 4/3.45 # 4
     
     n_erv = len(idx_erv) # 3 gen. eólicos
     eta_vector = np.zeros(ng) # inicialización de eta: parte estocástica
@@ -198,21 +217,6 @@ for u in casos_ejecutar:
 
     # Carga pre
     Load_bus_pre = data['Load_bus_pre']
-    # Load_bus_pre[2] -= 2.1 - 0.165 # PE CN
-    # if u in {1, 4, 5}:
-    #     Load_bus_pre *= 0.8
-    #     Load_bus_pre[2] -= 2.1 # 2.55 # PE CN
-    # if u == 1:
-    #     print(Load_bus_pre)
-    #     break
-    # if u == 5:
-        # Load_bus_pre[1] *= 2
-        # Load_bus_pre[5] *= 2
-    # Load_bus_pre *= 0.8 # 0.4#reducir dda en 0.85 en todos los casos con agc_u=True
-    # Load_bus_pre[1] *= 1 # C2: 0.8, C4: 0.4
-    # Load_bus_pre[2] *= 1 # C2: 0.8, C4: 0.4
-    # Load_bus_pre[5] *= 1.1 # C2: 0.8, C4: 0.45
-    # Load_bus_pre[7] *= 0.001#0.001, enap
 
     alm_2 = data['alm_2']
     alm_4 = data['alm_4']
@@ -223,7 +227,7 @@ for u in casos_ejecutar:
     vf = data['vf']     # parámetro binario
     
     # Número de tramos para la linealización de las pérdidas
-    L = 6 #6
+    L = 6
 
     k_coef = np.zeros((nl,L))
     for l in range(1,L+1):
@@ -237,11 +241,7 @@ for u in casos_ejecutar:
 
     # ENS
     Cto_ens = 10.04e3
-    #Cto_ens = 246.59
-    Pmax_ens = Load_bus_pre # np.ones(nb) * 50
-    # if u == 1:
-    #     print(nb)
-    #     print(f"Número de barras: {len(Load_bus_pre)}", Load_bus_pre)
+    Pmax_ens = Load_bus_pre
     
     contingencias = [('gen', i+1) for i in range(ng)]
     contingencias += [('load', 2), ('load', 4), ('load', 11), ('load', 15)]
@@ -280,9 +280,8 @@ for u in casos_ejecutar:
     n_df_post = m.addMVar((nl, L, K, n_w), vtype=GRB.BINARY, name=f'n_df_post_caso{u}')
 
     # Variable de encendido de gen.
-    if g_s:
-        u_i = m.addMVar(ng, vtype=GRB.BINARY, name=f'u_i_caso{u}')
-        m.addConstrs((u_i[h] == 1 for h in idx_erv), name=f'u_i_caso{u}_ones')
+    u_i = m.addMVar(ng, vtype=GRB.BINARY, name=f'u_i_caso{u}')
+    m.addConstrs((u_i[h] == 1 for h in idx_erv), name=f'u_i_caso{u}_ones')
 
     # Reserva caso u
     r_up = m.addMVar(ng, vtype=GRB.CONTINUOUS, lb=0, name=f'r_up_caso{u}')
@@ -304,13 +303,15 @@ for u in casos_ejecutar:
 
     for w in range(n_w):
         # Precontingencia para escenario w
-        Cop_pre_w = a_g @ (p_pre[:, w] + u_i*0.2) + p_ens_pre[:, w].sum() * Cto_ens
+        Cop_pre_w = a_g @ p_pre[:, w] + b_g @ u_i + p_ens_pre[:, w].sum() * Cto_ens
         Cop_pre_total += prob_w * Cop_pre_w
     
         # Postcontingencia para escenario w (promedio sobre todas las contingencias)
         for k in range(K):
-            Cop_post_w_k = a_g @ (p_post[:, k, w] + u_i*0.2) + p_ens_post[:, k, w].sum() * Cto_ens
-            #Cop_post_w_k = p_ens_post[:, k, w].sum() * Cto_ens
+            if opt_post:
+                Cop_post_w_k = a_g @ p_post[:, k, w] + b_g @ u_i + p_ens_post[:, k, w].sum() * Cto_ens
+            else:
+                Cop_post_w_k = p_ens_post[:, k, w].sum() * Cto_ens
             Cop_post_total += prob_w * Cop_post_w_k / K
 
     # Contribución del caso u a la FO total
@@ -318,9 +319,10 @@ for u in casos_ejecutar:
 
     vars_case = {
         'p_pre': p_pre,
-        'Pmax': Pmax,
         'f_pre': f_pre,
         'FM': FM,
+        'a_g': a_g,
+        'u_i': u_i,
         'ploss_pre': ploss_pre,
         'p_ens_pre': p_ens_pre,
         'p_post': p_post,
@@ -369,12 +371,8 @@ for u in casos_ejecutar:
         m.addConstr(A @ d_pre_w >= -pi/2, name=f'dm_pre_caso{u}_w{w}')
 
         # P_max y P_min
-        if not g_s:
-            m.addConstr(p_pre_w + eta_vector >= Pmin, name=f'P_min_pre_caso{u}_w{w}')
-            m.addConstr(-p_pre_w - eta_vector >= -Pmax, name=f'P_max_pre_caso{u}_w{w}')
-        else:
-            m.addConstr(p_pre_w + eta_vector * u_i >= Pmin * u_i, name=f'P_min_pre_caso{u}_w{w}')
-            m.addConstr(-p_pre_w - eta_vector * u_i >= -Pmax * u_i, name=f'P_max_pre_caso{u}_w{w}')
+        m.addConstr(p_pre_w + eta_vector * u_i >= Pmin * u_i, name=f'P_min_pre_caso{u}_w{w}')
+        m.addConstr(-p_pre_w - eta_vector * u_i >= -Pmax * u_i, name=f'P_max_pre_caso{u}_w{w}')
 
         # Reserva
         m.addConstr(-r_up >= -RUp * vf, name=f'RUp_caso{u}_w{w}')
@@ -484,8 +482,7 @@ for u in casos_ejecutar:
 
             if not ady:
                 for l in range(0,L):
-                    m.addConstr(-df_post_k[:,l] >= -FM/L, name=f'df_max_post[{k_idx}]_{l}_caso{u}_w{w}') 
-                    #m.addConstr(df_post_k[:,l] >= 0, name=f'df_min_post[{k_idx}]_{l}_caso{u}_w{w}')
+                    m.addConstr(-df_post_k[:,l] >= -FM/L, name=f'df_max_post[{k_idx}]_{l}_caso{u}_w{w}')
 
             m.addConstr(f_post_k == -Sb * BfR @ d_post_k, name = f'LVK_post[{k_idx}]_caso{u}_w{w}')
             m.addConstr(-f_post_k >= -FM, name = f'fmax_post[{k_idx}]_caso{u}_w{w}')
@@ -516,10 +513,9 @@ for u in casos_ejecutar:
                             m.addConstr(df_post_k[j,l] >= n_df_post_k[j,l] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')
                         elif l == L-1:
                             m.addConstr(-df_post_k[j,l] >= -n_df_post_k[j,l-1] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_max_caso{u}_w{w}')
-                            #m.addConstr(df_post_k[j,l] >= 0, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')
                         else:        
                             m.addConstr(-df_post_k[j,l] >= -n_df_post_k[j,l-1] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_max_caso{u}_w{w}')
-                            m.addConstr(df_post_k[j,l] >= n_df_post_k[j,l] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')                          
+                            m.addConstr(df_post_k[j,l] >= n_df_post_k[j,l] * FM[j]/L, name=f'df_post[{k_idx}]_line{j}_seg{l}_min_caso{u}_w{w}')
 
             #####################################################################################################################################
             # Límite ángulos
@@ -532,12 +528,8 @@ for u in casos_ejecutar:
                 for h in range(ng):
                     if h != index-1:   # todos excepto el fuera de servicio
                         # P_max y P_min
-                        if not g_s:    
-                            m.addConstr(p_post_k[h] + eta_vector_post[h] >= Pmin[h], name=f'Pmin_post[{k_idx},{h}]_caso{u}_w{w}')
-                            m.addConstr(-p_post_k[h] - eta_vector_post[h] >= -Pmax[h], name=f'Pmax_post[{k_idx},{h}]_caso{u}_w{w}')
-                        else:
-                            m.addConstr(p_post_k[h] + eta_vector_post[h] * u_i[h] >= Pmin[h] * u_i[h], name=f'Pmin_post[{k_idx},{h}]_caso{u}_w{w}')
-                            m.addConstr(-p_post_k[h] - eta_vector_post[h] * u_i[h] >= -Pmax[h] * u_i[h], name=f'Pmax_post[{k_idx},{h}]_caso{u}_w{w}')
+                        m.addConstr(p_post_k[h] + eta_vector_post[h] * u_i[h] >= Pmin[h] * u_i[h], name=f'Pmin_post[{k_idx},{h}]_caso{u}_w{w}')
+                        m.addConstr(-p_post_k[h] - eta_vector_post[h] * u_i[h] >= -Pmax[h] * u_i[h], name=f'Pmax_post[{k_idx},{h}]_caso{u}_w{w}')
                                                
                         #  Gen. renovables (límite VUL)
                         if h in idx_erv:
@@ -549,12 +541,8 @@ for u in casos_ejecutar:
             
             else:
                 # P_max y P_min
-                if not g_s:
-                    m.addConstr(p_post_k + eta_vector_post >= Pmin, name = f'P_min_post[{k_idx}]_caso{u}_w{w}')
-                    m.addConstr(-p_post_k - eta_vector_post >= -Pmax, name= f'P_max_post[{k_idx}]_caso{u}_w{w}')
-                else:
-                    m.addConstr(p_post_k + eta_vector_post * u_i >= Pmin * u_i, name = f'P_min_post[{k_idx}]_caso{u}_w{w}')
-                    m.addConstr(-p_post_k - eta_vector_post * u_i >= -Pmax * u_i, name= f'P_max_post[{k_idx}]_caso{u}_w{w}')
+                m.addConstr(p_post_k + eta_vector_post * u_i >= Pmin * u_i, name = f'P_min_post[{k_idx}]_caso{u}_w{w}')
+                m.addConstr(-p_post_k - eta_vector_post * u_i >= -Pmax * u_i, name= f'P_max_post[{k_idx}]_caso{u}_w{w}')
 
                 # Gen. renovables (límite VUL)
                 for idx_e in idx_erv:
