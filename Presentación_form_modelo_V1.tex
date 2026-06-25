@@ -1,328 +1,201 @@
 % Form. clásica, opt. pre 
 
+\section{Resultados SM de Punta Arenas}
+
+\begin{frame}{SM de Punta Arenas}
+{\small
+Datos del sistema:}
+\footnotesize
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Unidades Central Tres Puentes.}
+	\label{tab:ud_CTP}
+	\begin{tabular}{|c|c|c|c|}
+		\hline 
+		Unidad & Potencia máxima (MW) & Potencia mínima (MW) & Participación en CF \\
+		\hline
+		Unidad 1 & 24 & 10 & \textcolor{green!65!black}{\checkmark} \\
+		Unidad 3 & 1,46 & 0,5 & \textcolor{red}{$\times$} \\
+		Unidad 4 & 10 & 4 & \textcolor{green!65!black}{\checkmark} \\
+		Unidad 5 & 2,72 & 1 & \textcolor{red}{$\times$} \\
+		Unidad 7 & 15 & 5 & \textcolor{green!65!black}{\checkmark} \\
+		Unidad 8 & 10,5 & 2 & \textcolor{red}{$\times$} \\
+		Unidad 9 & 15 & 5 & \textcolor{green!65!black}{\checkmark} \\
+		Unidad 10 & 1,9 & 0,95 & \textcolor{red}{$\times$} \\
+		Unidad 11 & 1,9 & 0,95 & \textcolor{red}{$\times$} \\
+		Unidad 12 & 1,9 & 0,95 & \textcolor{red}{$\times$} \\
+		Unidad 13 & 1,9 & 0,95 & \textcolor{red}{$\times$} \\
+		Unidad 14 & 1,9 & 0,95 & \textcolor{red}{$\times$} \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}{}
+\footnotesize
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Unidades Central Punta Arenas.}
+	\label{tab:ud_CPA}
+	\begin{tabular}{|c|c|c|}
+		\hline 
+		Unidad & Potencia máxima (MW) & Participación en CF \\
+		\hline
+		Unidad 1 & 1,4 & \textcolor{red}{$\times$} \\
+		Unidad 2 & 1,4 & \textcolor{red}{$\times$} \\
+		Unidad 3 & 1,4 & \textcolor{red}{$\times$} \\
+		Unidad 5 & 6,7 & \textcolor{green!65!black}{\checkmark} \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Unidades Parque Eólico Vientos Patagónico.}
+	\label{tab:ud_PE_VP}
+	\begin{tabular}{|c|c|c|}
+		\hline Unidad & Potencia nominal (MW) & Participación en CF\\
+		\hline
+		Unidad 1 & 3,45 & \textcolor{green!65!black}{\textbf{\checkmark} (se habilitó)}\\
+		Unidad 2 & 3,45 & \textcolor{green!65!black}{\checkmark (se habilitó)}\\
+		Unidad 3 & 3,45 & \textcolor{green!65!black}{\checkmark (se habilitó)}\\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{}
+\footnotesize
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Costos unidades Central Tres Puentes.}
+	\label{tab:cto_ud_CTP}
+	\begin{tabular}{|c|c|}
+		\hline Costos de la unidades & Costo variable $a_{g}$ (\$/MWh) \\
+		\hline Unidad 4 & 17,815 \\
+		Unidad 5 & 23,389 \\
+		Unidad 7 & 9,819 \\
+		Unidad 8 & 20,137 \\
+		Unidad 9 & 9,819 \\
+		Unidad 10 & 31,4 \\
+		Unidad 11 & 31,4 \\
+		Unidad 12 & 31,4 \\
+		Unidad 13 & 31,4 \\
+		Unidad 14 & 31,4 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Costos generadores. \textcolor{blue}{No se incluye $C^{SU}_{g}$ en el modelo}}
+    \label{tab:cto_sm}
+    \begin{tabular}{|c|c|c|c|}
+        \hline 
+        Generador & $C^{SU}_{g}$ (\$/MWh) & $C^{Up}_{g}$ (\$/MWh) & $C^{Dn}_{g}$ (\$/MWh)\\
+        \hline
+        TG & 20\% $a_{g}$ &  70\% $a_{g}$ & 70\% $a_{g}$\\
+        PE &  0           &  10\% $a_{g}$ & 10\% $a_{g}$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{}
+\footnotesize
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{Imágenes/sep_SM_PA_v5.pdf}
+	\caption{Diagrama unilineal SM de Punta Arenas (elaboración propia a partir de \cite{ref3}).}
+	\label{sep_sm_pa}
+\end{figure}
+\end{frame}
+
 \begin{frame}{Solución: valor esperado}
-\footnotesize
+\small
 \begin{itemize}
-    \item Escenario de punta: $\varepsilon = 0$, $P^{fore} = 3.3$ MW, $\alpha = 0.1$, $\sigma = 0.33$ MW, $P^{VUL} = 2.21$ MW y $\eta_{2} = 0.99$MW.
+    \item Escenario de punta: $\varepsilon = 0$, $P^{fore} = 3.4$ MW, $\alpha = 0.1$, $\sigma = 0.34$ MW, $P^{VUL} = 2.38$ MW y $\eta_{2} = 1.02$MW.
 \end{itemize}
-
+\footnotesize
 \begin{table}[H]
 	\renewcommand{\arraystretch}{1.3}
 	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
+	\caption{Resumen de costos y reservas de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=1,02$ MW}
 	\label{tab:costos_reservas}
 	\begin{tabular}{|c|c|c|}
 		\hline
-		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
+		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 2.081,43 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 414,68 \\
-		\multicolumn{2}{|c|}{Costo de reserva} & 146,88 \\
-		\multicolumn{2}{|c|}{Costo de reserva Up} & 136,18 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,7 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.519,87 \\
-		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
-		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 1.918,72 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 394,18 \\
+		\multicolumn{2}{|c|}{Costo de reserva} & 145,98 \\
+		\multicolumn{2}{|c|}{Costo de reserva Up} & 135,25 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,73 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.378,56 \\
+		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,38 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
-		Unidad Nº 4 Solar Mars & 42,65 & 0 \\
-		Unidad Nº 7 Solar Titan & 66,36 & 0 \\
-		Unidad Nº 9 Solar Titan & 12,55 & 0 \\
-		WTG1 & 8,64 & 58,31 \\
-		WTG2 & 0 & 66,96 \\
-		WTG3 & 18,14 & 48,81 \\
+		Unidad Nº 4 Solar Mars & 41,12 & 0 \\
+		Unidad Nº 7 Solar Titan & 42,46 & 0 \\
+		Unidad Nº 9 Solar Titan & 37,06 & 0 \\
+		WTG1 & 12,33 & 56,65 \\
+		WTG2 & 10 & 58,99 \\
+		WTG3 & 10 & 58,99 \\
 		\hline
-		\textbf{Reserva total PE} & \textbf{8,93} & \textbf{58,03} \\
+		\textbf{Reserva total PE} & \textbf{10,78} & \textbf{58,21} \\
 		\hline
 	\end{tabular}
 \end{table}
 \end{frame}
 
-\begin{frame}{}
+\begin{frame}{Aumento capacidad PE a 12MW. Escenario de punta $\mathbf{P^{fore}=3.8}$ MW}
+
 \footnotesize
-
 \begin{table}[H]
 	\renewcommand{\arraystretch}{1.3}
 	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
-	\label{tab:despacho_caso2_w1}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
-		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
-		\hline
-		Unidad Nº 4 Solar Mars & 5,67 & 0 & 9,93 & 9,93 & 5,67 \\
-		Unidad Nº 7 Solar Titan & 5,01 & 12,29 & 0 & 5,46 & 8,48 \\
-		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
-		WTG1 & 2,01 & 2,31 & 2,31 & 0,35 & 0 \\
-		WTG2 & 2,31 & 1,83 & 2,31 & 0,35 & 0 \\
-		WTG3 & 1,68 & 0 & 2,31 & 0,03 & 0 \\
-		\hline
-		P\'erdidas & 0,74 & 0,5 & 0,93 & 0,17 & 0,12 \\
-		ENS total & 0 & 0 & 0 & 0 & 0 \\
-		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
-		\hline
-	\end{tabular}
-\end{table}
-
-\end{frame}
-
-\begin{frame}{}
-\scriptsize
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Flujos de potencia y cargabilidad --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
-	\label{tab:flujos_caso2_w1}
-	\setlength{\tabcolsep}{2pt}
-	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
-		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
-		\cline{2-11}
-		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
-		\hline
-		\multicolumn{11}{|c|}{L\'ineas} \\
-		\hline
-		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -6,98 & 32,95 & -5,26 & 24,84 & -7,8 & 36,83 & -2,02 & 9,55 & -1,33 & 6,26 \\
-		8-9 (PE) & -8,85 & 62,98 & -7,03 & 50 & -9,76 & 69,39 & -3,65 & 25,99 & -2,94 & 20,93 \\
-		9-10 (PE) & -8,89 & 63,22 & -7,06 & 50,18 & -9,79 & 69,66 & -3,67 & 26,11 & -2,96 & 21,04 \\
-		10-12 (WTG1-WTG2) & -5,93 & 42,17 & -3,79 & 26,97 & -6,54 & 46,55 & -2,34 & 16,67 & -1,97 & 14,04 \\
-		12-14 (WTG2-WTG3) & -2,66 & 18,9 & -0,99 & 7,02 & -3,28 & 23,29 & -1,01 & 7,2 & -0,99 & 7,02 \\
-		\hline
-		\multicolumn{11}{|c|}{Transformadores} \\
-		\hline
-		1-2 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
-		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -6,7 & 55,86 & -5,09 & 42,39 & -7,44 & 62,03 & -1,98 & 16,52 & -1,3 & 10,83 \\
-		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,99 & 74,81 & -3,29 & 82,22 & -3,29 & 82,22 & -1,33 & 33,33 & -0,99 & 24,72 \\
-		12-13 & -3,29 & 82,22 & -2,82 & 70,39 & -3,29 & 82,22 & -1,33 & 33,33 & -0,99 & 24,72 \\
-		14-15 & -2,67 & 66,67 & -0,99 & 24,72 & -3,29 & 82,22 & -1,01 & 25,37 & -0,99 & 24,72 \\
-		\hline
-	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\footnotesize
-\begin{itemize}
-    \item Escenario de media: $\varepsilon = 0$, $P^{fore} = 2.2$ MW, $\alpha = 0.1$, $\sigma = 0.22$ MW, $P^{VUL} = 1.54$ MW y $\eta_{2} = 0.66$MW.
-\end{itemize}
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,66$ MW}
+	\caption{Resumen de costos y reservas de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=1,14$ MW}
 	\label{tab:costos_reservas}
 	\begin{tabular}{|c|c|c|}
 		\hline
-		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
+		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 3.849,14 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 460,9 \\
-		\multicolumn{2}{|c|}{Costo de reserva} & 150,63 \\
-		\multicolumn{2}{|c|}{Costo de reserva Up} & 129,54 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 21,09 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 3.237,61 \\
-		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 2,2 MW \\
-		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 1,54 MW \\
-		\hline \hline
-		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
-		\hline
-		Unidad Nº 4 Solar Mars & 50 & 10 \\
-		Unidad Nº 7 Solar Titan & 55,05 & 0,37 \\
-		Unidad Nº 9 Solar Titan & 10,12 & 0 \\
-		WTG1 & 0 & 44,64 \\
-		WTG2 & 0 & 44,64 \\
-		WTG3 & 0 & 44,64 \\
-		\hline
-		\textbf{Reserva total PE} & \textbf{0} & \textbf{44,64} \\
-		\hline
-	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\footnotesize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,66$ MW}
-	\label{tab:despacho_caso2_w1}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
-		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
-		\hline
-		Unidad Nº 4 Solar Mars & 5 & 0 & 10 & 9,57 & 7 \\
-		Unidad Nº 7 Solar Titan & 5 & 10 & 0 & 5 & 5 \\
-		Unidad Nº 8 GE10 & 2,73 & 2,73 & 2,73 & 0 & 2,73 \\
-		WTG1 & 1,54 & 1,54 & 1,54 & 1,54 & 0 \\
-		WTG2 & 1,54 & 1,54 & 1,54 & 0,68 & 0,01 \\
-		WTG3 & 1,54 & 1,54 & 1,54 & 0,36 & 0,36 \\
-		\hline
-		P\'erdidas & 0,43 & 0,43 & 0,43 & 0,22 & 0,09 \\
-		ENS total & 0 & 0 & 0 & 0 & 0 \\
-		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
-		\hline
-	\end{tabular}
-\end{table}
-
-\end{frame}
-
-\begin{frame}{}
-\scriptsize
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Flujos de potencia y cargabilidad --- Caso 2, $\varepsilon=0$ MW, $\eta=0,66$ MW}
-	\label{tab:flujos_caso2_w1}
-	\setlength{\tabcolsep}{2pt}
-	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
-		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
-		\cline{2-11}
-		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
-		\hline
-		\multicolumn{11}{|c|}{L\'ineas} \\
-		\hline
-		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -4,79 & 22,6 & -4,79 & 22,6 & -4,79 & 22,6 & -2,86 & 13,5 & -0,72 & 3,42 \\
-		8-9 (PE) & -6,53 & 46,43 & -6,53 & 46,43 & -6,53 & 46,43 & -4,51 & 32,07 & -2,33 & 16,56 \\
-		9-10 (PE) & -6,55 & 46,6 & -6,55 & 46,6 & -6,55 & 46,6 & -4,53 & 32,2 & -2,34 & 16,67 \\
-		10-12 (WTG1-WTG2) & -4,38 & 31,12 & -4,38 & 31,12 & -4,38 & 31,12 & -2,34 & 16,67 & -1,69 & 11,99 \\
-		12-14 (WTG2-WTG3) & -2,19 & 15,57 & -2,19 & 15,57 & -2,19 & 15,57 & -1,01 & 7,2 & -1,02 & 7,26 \\
-		\hline
-		\multicolumn{11}{|c|}{Transformadores} \\
-		\hline
-		1-2 & 4,85 & 24,26 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
-		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -4,64 & 38,68 & -4,64 & 38,68 & -4,64 & 38,68 & -2,8 & 23,36 & -0,71 & 5,91 \\
-		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -0,66 & 16,49 \\
-		12-13 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -1,33 & 33,33 & -0,67 & 16,67 \\
-		14-15 & -2,19 & 54,87 & -2,19 & 54,87 & -2,19 & 54,87 & -1,01 & 25,37 & -1,02 & 25,56 \\
-		\hline
-	\end{tabular}
-\end{table}
-
-\end{frame}
-
-\begin{frame}{}
-\begin{itemize}
-    \item Aumento capacidad PE a 12MW. Escenario de punta $P^{fore}=3.8$ MW.
-\end{itemize}
-\footnotesize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=1,14$ MW}
-	\label{tab:costos_reservas}
-	\begin{tabular}{|c|c|c|}
-		\hline
-		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
-		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 1.518,01 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 399,68 \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 1.466,93 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 383,18 \\
 		\multicolumn{2}{|c|}{Costo de reserva} & 142,25 \\
 		\multicolumn{2}{|c|}{Costo de reserva Up} & 131,39 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,86 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 976,08 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,85 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 941,5 \\
 		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,8 MW \\
 		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,66 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
 		Unidad Nº 4 Solar Mars & 35,03 & 0 \\
-		Unidad Nº 7 Solar Titan & 66,5 & 0 \\
-		Unidad Nº 9 Solar Titan & 15,31 & 0 \\
-		WTG1 & 8,83 & 68,27 \\
-		WTG2 & 32,64 & 44,46 \\
-		WTG3 & 13,19 & 63,91 \\
+		Unidad Nº 7 Solar Titan & 30,74 & 0 \\
+		Unidad Nº 9 Solar Titan & 51,06 & 0 \\
+		WTG1 & 13,19 & 63,91 \\
+		WTG2 & 13,19 & 63,91 \\
+		WTG3 & 28,32 & 48,79 \\
 		\hline
-		\textbf{Reserva total PE} & \textbf{18,22} & \textbf{58,88} \\
-		\hline
-	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\footnotesize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=1,14$ MW}
-	\label{tab:despacho_caso2_w1}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
-		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
-		\hline
-		Unidad Nº 4 Solar Mars & 5,24 & 0 & 8,74 & 7,66 & 8,53 \\
-		Unidad Nº 7 Solar Titan & 5 & 10,72 & 0 & 5 & 5 \\
-		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
-		WTG1 & 2,36 & 0,2 & 2,66 & 0,86 & 0,2 \\
-		WTG2 & 1,53 & 2,66 & 2,66 & 1,53 & 0 \\
-		WTG3 & 2,2 & 2,66 & 2,66 & 0,86 & 0 \\
-		\hline
-		P\'erdidas & 0,85 & 0,75 & 1,24 & 0,44 & 0,15 \\
-		ENS total & 0 & 0 & 0 & 0 & 0 \\
-		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
+		\textbf{Reserva total PE} & \textbf{18,23} & \textbf{58,87} \\
 		\hline
 	\end{tabular}
 \end{table}
-\end{frame}
-
-\begin{frame}{}
-\scriptsize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Flujos de potencia y cargabilidad --- Caso 2, $\varepsilon=0$ MW, $\eta=1,14$ MW}
-	\label{tab:flujos_caso2_w1}
-	\setlength{\tabcolsep}{2pt}
-	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
-		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
-		\cline{2-11}
-		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
-		\hline
-		\multicolumn{11}{|c|}{L\'ineas} \\
-		\hline
-		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -7,46 & 35,22 & -6,93 & 32,7 & -9,13 & 43,07 & -4,87 & 22,96 & -1,95 & 9,22 \\
-		8-9 (PE) & -9,38 & 66,71 & -8,8 & 62,58 & -11,21 & 79,75 & -6,61 & 47 & -3,58 & 25,49 \\
-		9-10 (PE) & -9,42 & 66,97 & -8,83 & 62,82 & -11,26 & 80,08 & -6,63 & 47,18 & -3,6 & 25,6 \\
-		10-12 (WTG1-WTG2) & -5,97 & 42,47 & -7,53 & 53,53 & -7,53 & 53,53 & -4,65 & 33,08 & -2,27 & 16,16 \\
-		12-14 (WTG2-WTG3) & -3,32 & 23,61 & -3,77 & 26,79 & -3,77 & 26,79 & -1,99 & 14,19 & -1,14 & 8,08 \\
-		\hline
-		\multicolumn{11}{|c|}{Transformadores} \\
-		\hline
-		1-2 & 4,85 & 24,25 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
-		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -7,14 & 59,48 & -6,65 & 55,44 & -8,63 & 71,95 & -4,71 & 39,28 & -1,91 & 15,95 \\
-		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -3,48 & 87,07 & -1,33 & 33,33 & -3,79 & 94,63 & -2 & 50 & -1,33 & 33,33 \\
-		12-13 & -2,67 & 66,67 & -3,79 & 94,63 & -3,79 & 94,63 & -2,67 & 66,67 & -1,14 & 28,46 \\
-		14-15 & -3,33 & 83,33 & -3,79 & 94,63 & -3,79 & 94,63 & -2 & 50 & -1,14 & 28,46 \\
-		\hline
-	\end{tabular}
-\end{table}
-
 \end{frame}
 
 \begin{frame}{Múltiples escenarios}
 \begin{itemize}
-    \item 20 escenarios.
+    \item 10 escenarios.
 \end{itemize}
 
 \footnotesize
@@ -330,100 +203,33 @@
 \begin{table}[H]
 	\renewcommand{\arraystretch}{1.3}
 	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=-0,04$ MW, $\eta=0,95$ MW}
+	\caption{Resumen de costos y reservas de generadores --- Caso 2, $\varepsilon=-0,04$ MW, $\eta=0,98$ MW}
 	\label{tab:costos_reservas}
 	\begin{tabular}{|c|c|c|}
 		\hline
-		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
+		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 2.840,35 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 426,05 \\
-		\multicolumn{2}{|c|}{Costo de reserva} & 172,94 \\
-		\multicolumn{2}{|c|}{Costo de reserva Up} & 154,58 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 18,36 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 2.241,36 \\
-		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
-		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 2.831,67 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 408,97 \\
+		\multicolumn{2}{|c|}{Costo de reserva} & 170,92 \\
+		\multicolumn{2}{|c|}{Costo de reserva Up} & 151,2 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 19,72 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 2.251,79 \\
+		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,38 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
-		Unidad Nº 4 Solar Mars & 57,11 & 6,94 \\
-		Unidad Nº 7 Solar Titan & 55,85 & 0 \\
-		Unidad Nº 9 Solar Titan & 22,44 & 0 \\
-		WTG1 & 14,29 & 52,66 \\
-		WTG2 & 14,29 & 52,66 \\
-		WTG3 & 14,29 & 52,66 \\
+		Unidad Nº 4 Solar Mars & 55,6 & 8,24 \\
+		Unidad Nº 7 Solar Titan & 63,42 & 0 \\
+		Unidad Nº 9 Solar Titan & 12,81 & 0 \\
+		WTG1 & 17,76 & 51,23 \\
+		WTG2 & 17,76 & 51,23 \\
+		WTG3 & 17,76 & 51,23 \\
 		\hline
-		\textbf{Reserva total PE} & \textbf{14,29} & \textbf{52,66} \\
-		\hline
-	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\footnotesize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=-0,04$ MW, $\eta=0,95$ MW}
-	\label{tab:despacho_caso2_w10}
-	\begin{tabular}{|c|c|c|c|c|c|c|}
-		\hline
-		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{5}{c|}{Contingencias (MW)} \\ \cline{3-7}
-		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{gen.\\4} & \makecell{alm.\\2} \\
-		\hline
-		Unidad Nº 4 Solar Mars & 4 & 0 & 9,53 & 4 & 8,47 & 5,23 \\
-		Unidad Nº 7 Solar Titan & 6,76 & 9,53 & 0 & 10,42 & 6,76 & 6,76 \\
-		Unidad Nº 8 GE10 & 0,5 & 0,5 & 0,5 & 0 & 0,5 & 0,5 \\
-		WTG1 & 1,82 & 2,31 & 2,31 & 0,39 & 0 & 0,42 \\
-		WTG2 & 1,82 & 2,31 & 2,31 & 0,42 & 1,06 & 1,06 \\
-		WTG3 & 1,82 & 2,31 & 2,31 & 1,06 & 0,39 & 0,39 \\
-		\hline
-		P\'erdidas & 0,65 & 0,9 & 0,9 & 0,23 & 0,16 & 0,21 \\
-		ENS total & 0 & 0 & 0 & 0 & 0 & 0 \\
-		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
+		\textbf{Reserva total PE} & \textbf{17,76} & \textbf{51,23} \\
 		\hline
 	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\scriptsize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Flujos de potencia y cargabilidad --- Caso 2, $\varepsilon=-0,04$ MW, $\eta=0,95$ MW}
-	\label{tab:flujos_caso2_w10}
-	\setlength{\tabcolsep}{2pt}
-	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
-	\hline
-	\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
-	\cline{2-11}
-	 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
-	\hline
-	\multicolumn{11}{|c|}{L\'ineas} \\
-	\hline
-	4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-	7-8 (PE) & -6,36 & 30 & -7,69 & 36,31 & -7,69 & 36,31 & -3,02 & 14,24 & -3,02 & 14,24 \\
-	8-9 (PE) & -8,19 & 58,26 & -9,64 & 68,53 & -9,64 & 68,53 & -4,67 & 33,2 & -4,67 & 33,2 \\
-	9-10 (PE) & -8,22 & 58,48 & -9,67 & 68,8 & -9,67 & 68,8 & -4,69 & 33,33 & -4,69 & 33,33 \\
-	10-12 (WTG1-WTG2) & -5,49 & 39,07 & -6,46 & 45,97 & -6,46 & 45,97 & -3,36 & 23,91 & -3,32 & 23,65 \\
-	12-14 (WTG2-WTG3) & -2,75 & 19,55 & -3,23 & 23,01 & -3,23 & 23,01 & -1,99 & 14,19 & -1,33 & 9,47 \\
-	\hline
-	\multicolumn{11}{|c|}{Transformadores} \\
-	\hline
-	1-2 & 4,85 & 24,26 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,26 \\
-	1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-	1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-	1-7 & -6,12 & 50,96 & -7,35 & 61,22 & -7,35 & 61,22 & -2,96 & 24,63 & -2,96 & 24,63 \\
-	5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-	10-11 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -1,33 & 33,33 & -1,37 & 34,27 \\
-	12-13 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -1,37 & 34,29 & -2 & 50 \\
-	14-15 & -2,76 & 68,95 & -3,25 & 81,2 & -3,25 & 81,2 & -2 & 50 & -1,33 & 33,33 \\
-	\hline
-\end{tabular}
 \end{table}
 \end{frame}
 
@@ -433,101 +239,34 @@
 \begin{table}[H]
 	\renewcommand{\arraystretch}{1.3}
 	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
+	\caption{Resumen de costos y reservas de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=1,02$ MW}
 	\label{tab:costos_reservas}
 	\begin{tabular}{|c|c|c|}
 		\hline
-		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
+		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 2.141,17 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 414,68 \\
-		\multicolumn{2}{|c|}{Costo de reserva} & 204,54 \\
-		\multicolumn{2}{|c|}{Costo de reserva Up} & 193,84 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,7 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.521,95 \\
-		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
-		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 1.986,15 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 394,18 \\
+		\multicolumn{2}{|c|}{Costo de reserva} & 203,1 \\
+		\multicolumn{2}{|c|}{Costo de reserva Up} & 192,37 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,73 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.388,88 \\
+		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,38 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
-		Unidad Nº 4 Solar Mars & 42,65 & 0 \\
-		Unidad Nº 7 Solar Titan & 66,67 & 0 \\
-		Unidad Nº 9 Solar Titan & 12,24 & 0 \\
-		WTG1 & 8,64 & 58,31 \\
-		WTG2 & 0 & 66,96 \\
-		WTG3 & 18,14 & 48,81 \\
+		Unidad Nº 4 Solar Mars & 41,12 & 0 \\
+		Unidad Nº 7 Solar Titan & 57,33 & 0 \\
+		Unidad Nº 9 Solar Titan & 22,19 & 0 \\
+		WTG1 & 10 & 58,99 \\
+		WTG2 & 10 & 58,99 \\
+		WTG3 & 12,35 & 56,64 \\
 		\hline
-		\textbf{Reserva total PE} & \textbf{8,93} & \textbf{58,03} \\
-		\hline
-	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\footnotesize
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
-	\label{tab:despacho_caso2_w1}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
-		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
-		\hline
-		Unidad Nº 4 Solar Mars & 5,67 & 0 & 9,93 & 9,93 & 8,48 \\
-		Unidad Nº 7 Solar Titan & 5,01 & 14,4 & 0 & 5,82 & 5,01 \\
-		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
-		WTG1 & 2,01 & 0,4 & 2,31 & 0 & 0,35 \\
-		WTG2 & 2,31 & 1,01 & 2,31 & 0,35 & 0,35 \\
-		WTG3 & 1,68 & 0,35 & 2,31 & 0 & 0 \\
-		\hline
-		P\'erdidas & 0,74 & 0,23 & 0,93 & 0,16 & 0,15 \\
-		ENS total & 0 & 0 & 0 & 0 & 0 \\
-		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
+		\textbf{Reserva total PE} & \textbf{10,78} & \textbf{58,2} \\
 		\hline
 	\end{tabular}
 \end{table}
-
-\end{frame}
-
-\begin{frame}{}
-\scriptsize
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Flujos de potencia y cargabilidad --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
-	\label{tab:flujos_caso2_w1}
-	\setlength{\tabcolsep}{2pt}
-	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
-		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
-		\cline{2-11}
-		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
-		\hline
-		\multicolumn{11}{|c|}{L\'ineas} \\
-		\hline
-		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -6,98 & 32,95 & -3,03 & 14,32 & -7,8 & 36,83 & -1,66 & 7,84 & -2 & 9,43 \\
-		8-9 (PE) & -8,85 & 62,98 & -4,69 & 33,33 & -9,76 & 69,39 & -3,29 & 23,37 & -3,63 & 25,8 \\
-		9-10 (PE) & -8,89 & 63,22 & -4,71 & 33,47 & -9,79 & 69,66 & -3,3 & 23,48 & -3,64 & 25,92 \\
-		10-12 (WTG1-WTG2) & -5,93 & 42,17 & -3,32 & 23,65 & -6,54 & 46,55 & -2,32 & 16,48 & -2,32 & 16,48 \\
-		12-14 (WTG2-WTG3) & -2,66 & 18,9 & -1,33 & 9,47 & -3,28 & 23,29 & -0,99 & 7,02 & -0,99 & 7,02 \\
-		\hline
-		\multicolumn{11}{|c|}{Transformadores} \\
-		\hline
-		1-2 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 \\
-		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -6,7 & 55,86 & -2,97 & 24,78 & -7,44 & 62,03 & -1,63 & 13,57 & -1,96 & 16,31 \\
-		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,99 & 74,81 & -1,39 & 34,74 & -3,29 & 82,22 & -0,99 & 24,72 & -1,33 & 33,33 \\
-		12-13 & -3,29 & 82,22 & -2 & 50 & -3,29 & 82,22 & -1,33 & 33,33 & -1,33 & 33,33 \\
-		14-15 & -2,67 & 66,67 & -1,33 & 33,33 & -3,29 & 82,22 & -0,99 & 24,72 & -0,99 & 24,72 \\
-		\hline
-	\end{tabular}
-\end{table}
-
 \end{frame}
 
 \begin{frame}{Reducir costo de combustible a $0.65\cdot a_{g}$}
@@ -536,98 +275,31 @@
 \begin{table}[H]
 	\renewcommand{\arraystretch}{1.3}
 	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
+	\caption{Resumen de costos y reservas de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=1,02$ MW}
 	\label{tab:costos_reservas}
 	\begin{tabular}{|c|c|c|}
 		\hline
-		\multicolumn{2}{|c|}{Costos} & Valor (\$/h) \\
+		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
 		\hline
-		\multicolumn{2}{|c|}{Costo total del sistema} & 1.907,78 \\
-		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 337,63 \\
-		\multicolumn{2}{|c|}{Costo de reserva} & 146,88 \\
-		\multicolumn{2}{|c|}{Costo de reserva Up} & 136,18 \\
-		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,7 \\
-		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.423,28 \\
-		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,3 MW \\
-		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,31 MW \\
+		\multicolumn{2}{|c|}{Costo total del sistema} & 1.636,1 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 256,21 \\
+		\multicolumn{2}{|c|}{Costo de reserva} & 145,98 \\
+		\multicolumn{2}{|c|}{Costo de reserva Up} & 135,25 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 10,73 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.233,9 \\
+		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,38 MW \\
 		\hline \hline
 		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
 		\hline
-		Unidad Nº 4 Solar Mars & 42,65 & 0 \\
-		Unidad Nº 7 Solar Titan & 63,57 & 0 \\
-		Unidad Nº 9 Solar Titan & 15,33 & 0 \\
-		WTG1 & 8,64 & 58,31 \\
-		WTG2 & 0 & 66,96 \\
-		WTG3 & 18,14 & 48,81 \\
+		Unidad Nº 4 Solar Mars & 41,12 & 0 \\
+		Unidad Nº 7 Solar Titan & 40,58 & 0 \\
+		Unidad Nº 9 Solar Titan & 38,94 & 0 \\
+		WTG1 & 12,33 & 56,65 \\
+		WTG2 & 10 & 58,99 \\
+		WTG3 & 10 & 58,99 \\
 		\hline
-		\textbf{Reserva total PE} & \textbf{8,93} & \textbf{58,03} \\
-		\hline
-	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\footnotesize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Despacho de generadores --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
-	\label{tab:despacho_caso2_w1}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\multirow{2}{*}{Generador} & \multirow{2}{*}{\makecell{Pre\\(MW)}} & \multicolumn{4}{c|}{Contingencias (MW)} \\ \cline{3-6}
-		 & & \makecell{gen.\\1} & \makecell{gen.\\2} & \makecell{gen.\\3} & \makecell{alm.\\2} \\
-		\hline
-		Unidad Nº 4 Solar Mars & 5,67 & 0 & 9,93 & 9,93 & 8,44 \\
-		Unidad Nº 7 Solar Titan & 5,01 & 14,46 & 0 & 5,82 & 5,01 \\
-		Unidad Nº 8 GE10 & 0 & 0 & 0 & 0 & 0 \\
-		WTG1 & 2,01 & 1,01 & 2,31 & 0 & 0,35 \\
-		WTG2 & 2,31 & 0,35 & 2,31 & 0,35 & 0,39 \\
-		WTG3 & 1,68 & 0,35 & 2,31 & 0 & 0 \\
-		\hline
-		P\'erdidas & 0,74 & 0,22 & 0,93 & 0,16 & 0,16 \\
-		ENS total & 0 & 0 & 0 & 0 & 0 \\
-		Carga total & 18,91 & 18,91 & 18,91 & 18,91 & 17 \\
-		\hline
-	\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{}
-\scriptsize
-
-\begin{table}[H]
-	\renewcommand{\arraystretch}{1.3}
-	\centering
-	\caption{Flujos de potencia y cargabilidad --- Caso 2, $\varepsilon=0$ MW, $\eta=0,99$ MW}
-	\label{tab:flujos_caso2_w1}
-	\setlength{\tabcolsep}{2pt}
-	\begin{tabular}{|c|c|c|cc|cc|cc|cc|}
-		\hline
-		\multirow{2}{*}{Branch} & \multicolumn{2}{c|}{Pre} & \multicolumn{2}{c|}{\makecell{Cont 1\\gen. 1}} & \multicolumn{2}{c|}{\makecell{Cont 2\\gen. 2}} & \multicolumn{2}{c|}{\makecell{Cont 3\\gen. 3}} & \multicolumn{2}{c|}{\makecell{Cont 7\\alm. 2}} \\
-		\cline{2-11}
-		 & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) & Flujo (MW) & Carg. (\%) \\
-		\hline
-		\multicolumn{11}{|c|}{L\'ineas} \\
-		\hline
-		4-5 (66 kV) & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 10,55 & 32,06 & 8,63 & 26,23 \\
-		7-8 (PE) & -6,98 & 32,95 & -2,98 & 14,07 & -7,8 & 36,83 & -1,66 & 7,84 & -2,04 & 9,63 \\
-		8-9 (PE) & -8,85 & 62,98 & -4,63 & 32,94 & -9,76 & 69,39 & -3,29 & 23,37 & -3,67 & 26,12 \\
-		9-10 (PE) & -8,89 & 63,22 & -4,65 & 33,08 & -9,79 & 69,66 & -3,3 & 23,48 & -3,69 & 26,24 \\
-		10-12 (WTG1-WTG2) & -5,93 & 42,17 & -2,66 & 18,92 & -6,54 & 46,55 & -2,32 & 16,48 & -2,36 & 16,8 \\
-		12-14 (WTG2-WTG3) & -2,66 & 18,9 & -1,33 & 9,47 & -3,28 & 23,29 & -0,99 & 7,02 & -0,99 & 7,02 \\
-		\hline
-		\multicolumn{11}{|c|}{Transformadores} \\
-		\hline
-		1-2 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,25 & 4,85 & 24,26 \\
-		1-3 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 & 1,94 & 13,82 \\
-		1-4 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 10,59 & 16,82 & 8,66 & 13,76 \\
-		1-7 & -6,7 & 55,86 & -2,92 & 24,34 & -7,44 & 62,03 & -1,63 & 13,57 & -2 & 16,67 \\
-		5-6 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 10,52 & 31,87 & 8,61 & 26,08 \\
-		10-11 & -2,99 & 74,81 & -2 & 50 & -3,29 & 82,22 & -0,99 & 24,72 & -1,33 & 33,33 \\
-		12-13 & -3,29 & 82,22 & -1,33 & 33,33 & -3,29 & 82,22 & -1,33 & 33,33 & -1,38 & 34,46 \\
-		14-15 & -2,67 & 66,67 & -1,33 & 33,33 & -3,29 & 82,22 & -0,99 & 24,72 & -0,99 & 24,72 \\
+		\textbf{Reserva total PE} & \textbf{10,78} & \textbf{58,21} \\
 		\hline
 	\end{tabular}
 \end{table}
