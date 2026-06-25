@@ -1,0 +1,695 @@
+\section{Resultados sistema de estudio 1}
+
+\begin{frame}{Sistema de estudio 1}
+\footnotesize
+Datos del sistema:
+\begin{itemize}
+    \item $2.4<p_{g}<50$MW
+    \item Reactancias de 0,63 p.u. sobre una base de 100 MVA y 138 kV.
+\end{itemize}   
+
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Costos generadores sistema de 3 barras.}
+    \label{tab:cto_sep_paper}
+    \begin{tabular}{|c|c|c|c|c|c|}
+		\hline 
+		Generador & $a_{g}$ (\$/MWh) & $b_{g}$ (\$/MWh) & $C^{Up}_{g}$ & $C^{Dn}_{g}$& $C^{SU}_{g}$\\
+		\hline
+		1& 50  &  10 &  1    & 0,25 & 10 \\
+		2& 0   &  0  &  0,15 & 0,15 & - \\
+		3& 19,9&  5  &  0,7  & 0,1  & 3,98 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.45\linewidth]{Imágenes/sep_paper.pdf}
+	\caption{Sistema de tres barras paper (elaboración propia a partir de \cite{ref1}).}
+	\label{sep_3b_paper}
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}{Solución}
+\begin{itemize}
+    \item $\varepsilon = 0$, $P^{fore}_{2} = 50$ MW, $\alpha = 0.1$, $\sigma = 5$ MW, $P^{VUL}_{2} = 35$ MW y $\eta_{2} = 15$MW.
+\end{itemize}
+
+\small
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Resumen de costos y reservas de generadores para el sistema de estudio.}
+	\label{tab:res_ctos}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 933,39 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 210,62 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 35,37 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 32,94 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 2,43 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 687,4 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 7,6 & 0 \\
+		2 & 0 & 16,2 \\
+		3 & 36,2 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{}
+\footnotesize
+    \begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Despacho de generadores y flujos de las líneas para el sistema de estudio.}
+	\label{tab:pg_f}
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+		& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+		\hline
+		\multicolumn{8}{|c|}{Despacho de generadores} \\
+		\hline
+		1 & 2,4 & 0 & 10 & 10 & 10 & 2,4 & 10 \\
+		2 & 28,8 & 12,6 & 0 & 25 & 15 & 12,6 & 21,2 \\
+		3 & 3,8 & 22,4 & 40 & 0 & 10 & 20 & 3,8 \\
+		\hline
+		\multicolumn{8}{|c|}{Flujos en las líneas} \\
+		\hline
+		1-2 & -13,8 & -9,2 & 3,33 & -10 & 0 & 2,4 & -36,2 \\
+		1-3 & 16,2 & 9,2 & 6,67 & 20 & 10 & 0 & 46,2 \\
+		2-3 & 30 & 18,4 & 3,33 & 30 & 30 & 30 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Sin congestión, $\mathbf{F^{M}_{2-3} = 100}$ MW}
+
+\small
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Resumen de costos y reservas de generadores}
+	\label{tab: }
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 319,1 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 52,76 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 33,68 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 33,68 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 0 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 232,66 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 0 & 0 \\
+		2 & 2,4 & 0 \\
+		3 & 47,6 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{}
+\small
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Despacho de generadores y flujos de las líneas}
+	\label{tab: }
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{5}{c|}{Contingencias (MW)} \\ \cline{3-7}
+		& & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+		\hline
+		\multicolumn{7}{|c|}{Despacho de generadores} \\
+		\hline
+		1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		2 & 32,6 & 0 & 35 & 32,6 & 32,6 & 32,6 \\
+		3 & 2,4 & 50 & 0 & 2,4 & 2,4 & 2,4 \\
+		\hline
+		\multicolumn{7}{|c|}{Flujos en las líneas} \\
+		\hline
+		1-2 & -15,87 & 0 & -16,67 & 0 & 0 & -47,6 \\
+		1-3 & 15,87 & 0 & 16,67 & 0 & 0 & 47,6 \\
+		2-3 & 31,73 & 0 & 33,33 & 47,6 & 47,6 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Aumento de demanda a 70 MW}
+\small
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Resumen de costos y reservas de generadores, aumento de demanda a 70 MW.}
+    \label{tab:res_ctos_caso1}
+    \begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 2.236,23 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 608,62 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 62,51 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 58,94 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 3,57 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 1.565,1 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 47,6 & 0 \\
+		2 & 0 & 23,8 \\
+		3 & 16,2 & 0 \\
+		\hline
+	\end{tabular}
+	\end{table}
+
+\end{frame}
+\begin{frame}{}
+\small
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Despacho de generadores y flujos de las líneas, aumento de demanda a 70 MW.}
+    \label{tab:pg_f_caso1}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+		& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+		\hline
+		\multicolumn{8}{|c|}{Despacho de generadores} \\
+		\hline
+		1 & 2,4 & 0 & 30 & 50 & 16,2 & 2,4 & 26,2 \\
+		2 & 28,8 & 28,8 & 0 & 5 & 15 & 12,6 & 5 \\
+		3 & 23,8 & 26,2 & 40 & 0 & 23,8 & 40 & 23,8 \\
+		\hline
+		\multicolumn{8}{|c|}{Flujos en las líneas} \\
+		\hline
+		1-2 & -13,8 & -14,6 & 10 & 10 & 0 & 2,4 & -20 \\
+		1-3 & 16,2 & 14,6 & 20 & 40 & 16,2 & 0 & 46,2 \\
+		2-3 & 30 & 29,2 & 10 & 30 & 30 & 30 & 0 \\
+		\hline
+	\end{tabular}
+	\end{table}
+\end{frame}
+
+\begin{frame}{Caso de estudio 1: $\mathbf{a_{1}=10,3}$ \$/MWh}
+
+\small
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Resumen de costos y reservas de generadores para el caso 1.}
+    \label{tab:res_ctos_caso1}
+    \begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 566,38 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 116,32 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 33,76 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 31,12 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 2,64 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 416,3 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 4,8 & 0 \\
+		2 & 0 & 17,6 \\
+		3 & 37,6 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\small    
+ \begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Despacho de generadores y flujos de las líneas para el caso 1.}
+    \label{tab:pg_f_caso1}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+		& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+		\hline
+		\multicolumn{8}{|c|}{Despacho de generadores} \\
+		\hline
+		1 & 5,2 & 0 & 10 & 10 & 10 & 5,2 & 10 \\
+		2 & 27,4 & 9,8 & 0 & 25 & 15 & 9,8 & 22,6 \\
+		3 & 2,4 & 25,2 & 40 & 0 & 10 & 20 & 2,4 \\
+		\hline
+		\multicolumn{8}{|c|}{Flujos en las líneas} \\
+		\hline
+		1-2 & -12,4 & -8,27 & 3,33 & -10 & 0 & 5,2 & -37,6 \\
+		1-3 & 17,6 & 8,27 & 6,67 & 20 & 10 & 0 & 47,6 \\
+		2-3 & 30 & 16,53 & 3,33 & 30 & 30 & 30 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Aumento de demanda a 70 MW}
+\small
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Resumen de costos y reservas de generadores para el caso 1, aumento de demanda a 70 MW.}
+    \label{tab:res_ctos_caso1_70}
+    \begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 1.311,62 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 528,32 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 40,92 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 32,26 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 8,66 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 742,38 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 4,8 & 30,2 \\
+		2 & 7,6 & 7,4 \\
+		3 & 37,6 & 0 \\
+		\hline
+	\end{tabular}
+	\end{table}
+
+\end{frame}
+\begin{frame}{}
+\scriptsize
+	\begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Despacho de generadores y flujos de las líneas para el caso 1, aumento de demanda a 70 MW.}
+		\label{tab:pg_f_caso1_70}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+    		\hline
+    		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+    		& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+    		\hline
+    		\multicolumn{8}{|c|}{Despacho de generadores} \\
+    		\hline
+    		1 & 45,2 & 0 & 30 & 50 & 37,6 & 15 & 50 \\
+    		2 & 7,4 & 15 & 0 & 5 & 15 & 0 & 2,6 \\
+    		3 & 2,4 & 40 & 40 & 0 & 2,4 & 40 & 2,4 \\
+    		\hline
+    		\multicolumn{8}{|c|}{Flujos en las líneas} \\
+    		\hline
+    		1-2 & 7,6 & -10 & 10 & 10 & 0 & 15 & -17,6 \\
+    		1-3 & 37,6 & 10 & 20 & 40 & 37,6 & 0 & 67,6 \\
+    		2-3 & 30 & 20 & 10 & 30 & 30 & 30 & 0 \\
+    		\hline
+    	\end{tabular}
+	\end{table}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{Imágenes/caso1_70.pdf}
+		\caption{Caso 1: Contingencia salida gen. 1, aumento de demanda a 70 MW.}
+		\label{caso1_70}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Reducción capacidad línea 2-3 a $\mathbf{F_{2-3}=23}$ MW}
+\small
+	\begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Resumen de costos y reservas de generadores para el caso 1, $F_{2-3}=23$.}
+		\label{tab:res_ctos_caso1_23}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\multicolumn{2}{|l|}{Costos} & Valor (\$/h) \\
+			\hline
+			\multicolumn{2}{|l|}{Costo Total del Sistema} & 359,19 \\
+			\multicolumn{2}{|l|}{Costo Pre-contingencia} & 332,62 \\
+			\multicolumn{2}{|l|}{Costo de Reserva (total)} & 26,57 \\
+			\multicolumn{2}{|l|}{Costo Post-contingencia} & 0 \\
+			\hline \hline
+			Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+			\hline
+			1 & 4,8 & 18,2 \\
+			2 & 1,6 & 6,4 \\
+			3 & 24,6 & 0 \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+\end{frame}
+\begin{frame}{}
+\scriptsize
+	\begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Despacho de generadores y flujos de las líneas para el caso 1, $F_{2-3}=23$.}
+		\label{tab:pg_f_caso1_23}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+			\hline
+			\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+			& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+			\hline
+			\multicolumn{8}{|c|}{Despacho de generadores} \\
+			\hline
+			1 & 26,2 & 0 & 31 & 31 & 31 & 8 & 31 \\
+			2 & 6,4 & 8 & 0 & 4 & 1,6 & 0 & 1,6 \\
+			3 & 2,4 & 27 & 4 & 0 & 2,4 & 27 & 2,4 \\
+			\hline
+			\multicolumn{8}{|c|}{Flujos en las líneas} \\
+			\hline
+			1-2 & 1,6 & -7,67 & 5,33 & 4 & 0 & 8 & -16,6 \\
+			1-3 & 24,6 & 7,67 & 25,67 & 27 & 31 & 0 & 47,6 \\
+			2-3 & 23 & 15,33 & 20,33 & 23 & 16,6 & 23 & 0 \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{Imágenes/caso1_23.pdf}
+		\caption{Caso 1: Contingencia salida gen. 1, $F_{2-3}=23$.}
+		\label{caso1_23}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}{Caso de estudio 2: Reducción capacidad línea 1-2 a $\mathbf{F_{1-2}=10}$ MW}
+\begin{itemize}
+    \item $\varepsilon=-\zeta$ y $\eta_{2} = 0$.
+\end{itemize}
+\small
+\begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Resumen de costos y reservas de generadores para el caso 2.}
+		\label{tab:res_ctos_caso2}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\multicolumn{2}{|l|}{Costos} & Valor (\$/h) \\
+			\hline
+			\multicolumn{2}{|l|}{Costo Total del Sistema} & 463,94 \\
+			\multicolumn{2}{|l|}{Costo Pre-contingencia} & 437,48 \\
+			\multicolumn{2}{|l|}{Costo de Reserva (total)} & 26,46 \\
+			\multicolumn{2}{|l|}{Costo Post-contingencia} & 0 \\
+			\hline \hline
+			Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+			\hline
+			1 & 12,6 & 0 \\
+			2 & 2,6 & 22,4 \\
+			3 & 19,8 & 0 \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+\end{frame}
+\begin{frame}{}
+\scriptsize
+\begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Despacho de generadores y flujos de las líneas para el caso 2.}
+		\label{tab:pg_f_caso2}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+			\hline
+			\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+			& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+			\hline
+			\multicolumn{8}{|c|}{Despacho de generadores} \\
+			\hline
+			1 & 2,4 & 0 & 15 & 15 & 4,8 & 10 & 15 \\
+			2 & 32,4 & 30 & 0 & 35 & 30 & 20 & 10 \\
+			3 & 15,2 & 20 & 35 & 0 & 15,2 & 20 & 25 \\
+			\hline
+			\multicolumn{8}{|c|}{Flujos en las líneas} \\
+			\hline
+			1-2 & -10 & -10 & 5 & -6,67 & 0 & 10 & -10 \\
+			1-3 & 12,4 & 10 & 10 & 21,67 & 4,8 & 0 & 25 \\
+			2-3 & 22,4 & 20 & 5 & 28,33 & 30 & 30 & 0 \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{Imágenes/caso2_10.pdf}
+		\caption{Caso 2: Contingencia salida gen. 3.}
+		\label{caso2}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Caso de estudio 3: minimizar costos post-contingencia}
+\small
+\begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Resumen de costos y reservas de generadores para el caso 3.}
+		\label{tab:res_ctos_caso4}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\multicolumn{2}{|l|}{Costos} & Valor (\$/h) \\
+			\hline
+			\multicolumn{2}{|l|}{Costo Total del Sistema} & 445,19 \\
+			\multicolumn{2}{|l|}{Costo Pre-contingencia} & 0 \\
+			\multicolumn{2}{|l|}{Costo de Reserva (total)} & 9,48 \\
+			\multicolumn{2}{|l|}{Costo Post-contingencia} & 435,71 \\
+			\hline \hline
+			Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+			\hline
+			1 & 0 & 7,6 \\
+			2 & 30,2 & 0 \\
+			3 & 7,6 & 22,6 \\
+			\hline
+		\end{tabular}
+	\end{table}
+\end{frame}
+\begin{frame}{}
+\scriptsize
+\begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Despacho de generadores y flujos de las líneas para el caso 3.}
+		\label{tab:pg_f_caso4}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+			\hline
+			\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+			& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+			\hline
+			\multicolumn{8}{|c|}{Despacho de generadores} \\
+			\hline
+			1 & 10 & 0 & 2,4 & 10 & 2,4 & 2,4 & 2,4 \\
+			2 & 0 & 30 & 0 & 25 & 15 & 12,6 & 30,2 \\
+			3 & 25 & 5 & 32,6 & 0 & 17,6 & 20 & 2,4 \\
+			\hline
+			\multicolumn{8}{|c|}{Flujos en las líneas} \\
+			\hline
+			1-2 & -1,67 & -15 & -4,2 & -10 & 0 & 2,4 & -45,2 \\
+			1-3 & 11,67 & 15 & 6,6 & 20 & 2,4 & 0 & 47,6 \\
+			2-3 & 13,33 & 30 & 10,8 & 30 & 30 & 30 & 0 \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{Imágenes/caso4.pdf}
+		\caption{Caso 3: Contingencia salida gen. 1.}
+		\label{caso4}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Caso de estudio 4: múltiples escenarios de incertidumbre}
+\small
+\begin{itemize}
+    \item 10 escenarios.
+\end{itemize}
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Resumen de costos y reservas de generadores para el caso 4, incertidumbre $\varepsilon = -0.62$ MW, $\eta_{2} = 14.38$ MW.}
+    \label{tab:res_ctos_caso4}
+    \begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 921,75 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 211,31 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 35,37 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 32,94 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 2,43 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 675,07 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 7,6 & 0 \\
+		2 & 0 & 16,2 \\
+		3 & 36,2 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}{}
+\scriptsize
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Despacho de generadores y flujos de las líneas para el caso 4, incertidumbre $\varepsilon = -0.62$ MW, $\eta_{2} = 14.38$ MW.}
+    \label{tab:pg_f_caso4}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+		& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+		\hline
+		\multicolumn{8}{|c|}{Despacho de generadores} \\
+		\hline
+		1 & 2,4 & 0 & 10 & 10 & 10 & 2,4 & 10 \\
+		2 & 29,42 & 13,22 & 0 & 25,62 & 15,62 & 13,22 & 21,82 \\
+		3 & 3,8 & 22,4 & 40 & 0 & 10 & 20 & 3,8 \\
+		\hline
+		\multicolumn{8}{|c|}{Flujos en las líneas} \\
+		\hline
+		1-2 & -13,8 & -9,2 & 3,33 & -10 & 0 & 2,4 & -36,2 \\
+		1-3 & 16,2 & 9,2 & 6,67 & 20 & 10 & 0 & 46,2 \\
+		2-3 & 30 & 18,4 & 3,33 & 30 & 30 & 30 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Caso de estudio 5: traslado de la demanda a la barra 1}
+\small
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Resumen de costos y reservas de generadores para el caso 5.}
+    \label{tab:res_ctos_caso5}
+    \begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 391,78 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 52,76 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 36,32 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 33,68 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 2,64 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 302,7 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 0 & 0 \\
+		2 & 2,4 & 17,6 \\
+		3 & 47,6 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}{}
+\scriptsize
+\begin{table}[H]
+    \renewcommand{\arraystretch}{1.3}
+    \centering
+    \caption{Despacho de generadores y flujos de las líneas para el caso 5.}
+    \label{tab:pg_f_caso5}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{5}{c|}{Contingencias (MW)} \\ \cline{3-7}
+		& & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+		\hline
+		\multicolumn{7}{|c|}{Despacho de generadores} \\
+		\hline
+		1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		2 & 32,6 & 0 & 35 & 15 & 32,6 & 32,6 \\
+		3 & 2,4 & 50 & 0 & 20 & 2,4 & 2,4 \\
+		\hline
+		\multicolumn{7}{|c|}{Flujos en las líneas} \\
+		\hline
+		1-2 & -32,53 & -16,67 & -33,33 & 0 & -50 & -47,6 \\
+		1-3 & -17,47 & -33,33 & -16,67 & -50 & 0 & -2,4 \\
+		2-3 & 15,07 & -16,67 & 16,67 & 30 & -2,4 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{Imágenes/caso5.pdf}
+		\caption{Caso 5: Contingencia salida gen. 3.}
+		\label{caso5}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Caso de estudio 6: aumento costo de reserva a $0.6\cdot a_{1}$ y $1.5\cdot a_{3}$}
+\small
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Resumen de costos y reservas de generadores para el caso 6.}
+	\label{tab: }
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|l|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|l|}{Costo total del sistema} & 1.984,9 \\
+		\multicolumn{2}{|l|}{Costo pre-contingencia} & 783,74 \\
+		\multicolumn{2}{|l|}{Costo de reserva (total)} & 386,37 \\
+		\multicolumn{2}{|l|}{Costo de reserva Up} & 386,37 \\
+		\multicolumn{2}{|l|}{Costo de reserva Dn} & 0 \\
+		\multicolumn{2}{|l|}{Costo post-contingencia} & 814,79 \\
+		\hline \hline
+		Generador & Reserva Up (MW) & Reserva Dn (MW) \\
+		\hline
+		1 & 7,6 & 0 \\
+		2 & 25 & 0 \\
+		3 & 7,4 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\small
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Despacho de generadores y flujos de las líneas para el caso 6.}
+	\label{tab: }
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Elemento} & \multirow{2}{*}{\makecell{Pre-contingencia\\(MW)}} & \multicolumn{6}{c|}{Contingencias (MW)} \\ \cline{3-8}
+		& & gen. 1 & gen. 2 & gen. 3 & línea 1-2 & línea 1-3 & línea 2-3 \\
+		\hline
+		\multicolumn{8}{|c|}{Despacho de generadores} \\
+		\hline
+		1 & 2,4 & 0 & 10 & 10 & 2,4 & 2,4 & 2,4 \\
+		2 & 0 & 0 & 0 & 25 & 0 & 0 & 0 \\
+		3 & 32,6 & 35 & 40 & 0 & 32,6 & 32,6 & 32,6 \\
+		\hline
+		\multicolumn{8}{|c|}{Flujos en las líneas} \\
+		\hline
+		1-2 & -4,2 & -5 & 3,33 & -10 & 0 & 2,4 & -15 \\
+		1-3 & 6,6 & 5 & 6,67 & 20 & 2,4 & 0 & 17,4 \\
+		2-3 & 10,8 & 10 & 3,33 & 30 & 15 & 17,4 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+\end{frame}
