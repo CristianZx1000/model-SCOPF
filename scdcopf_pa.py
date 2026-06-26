@@ -1220,84 +1220,97 @@ print(f"\nArchivo '{nombre_archivo}' generado exitosamente con ENS, flujos separ
 
 #os.startfile(nombre_archivo)
 
-# Gráficos de barras: potencia y flujos, pre y post-contingencia
-# Sistema real (multi-caso) — exportación a PDF
+# ============================================================================
+# Gráficos combinados (pre+post) por contingencia objetivo, y gráfico de
+# reserva/vertimiento del Parque Eólico (PE) — exportación a PDF
 # ----------------------------------------------------------------------------
-# Pegar este bloque DESPUÉS de que `vars_list` esté construido y el modelo
-# haya sido resuelto (después de m.optimize() en el script principal).
-# No depende de la exportación a Excel; puede ir antes o después de esa.
+# Pegar después de que `vars_list` esté construido y el modelo resuelto
+# (después de m.optimize()). No depende de la exportación a Excel.
+# Reemplaza a graficos_barras_main.py de la versión anterior.
 # ============================================================================
 
 import os
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 
 # ============================================================================
 # 1. CONFIGURACIÓN DEL USUARIO
 # ============================================================================
 
-# --- Tamaño / resolución de las figuras ---
-# FIGSIZE es lo que realmente define el tamaño físico del PDF (ancho, alto en
-# pulgadas) -> es el parámetro a ajustar cuando pruebes tamaños para el informe.
-# DPI casi no influye en PDF (es vectorial); se deja por si en algún momento
-# exportas también a PNG.
-FIGSIZE = (8, 5)
-DPI = 300
+FIGSIZE = (9, 5.5)   # ancho, alto [pulgadas] -> tamaño físico real del PDF (AJUSTAR PARA EL INFORME)
+DPI = 300            # poco relevante en PDF (vectorial); útil si exportas también a PNG
 
-# --- Carpeta de salida (se crea automáticamente si no existe) ---
 CARPETA_SALIDA = "graficos_resultados"
 
-# --- Selector de gráficos a generar ---
-# 'all' genera todo. También se puede pasar una lista, ej: CASOS_A_GRAFICAR = [1, 2]
-CASOS_A_GRAFICAR = 'all'
-# Subconjunto de {'pre_potencia', 'pre_flujos', 'post_potencia', 'post_flujos'}
-TIPOS_A_GRAFICAR = 'all'
+CASOS_A_GRAFICAR = 'all'          # 'all' o lista, ej: [1, 2]
+TIPOS_A_GRAFICAR = 'all'          # 'all' o subconjunto de {'despacho', 'flujos', 'pe'}
 
-# --- Contingencias post-contingencia de interés ---
-# Se buscan dinámicamente en cada caso (por nombre/número, no por posición),
-# porque el conjunto de generadores activos cambia entre casos.
+ORDENAR_POR_ETA = True            # eje x ordenado por valor de eta (ascendente)
+
+# --- Contingencias post-contingencia de interés (búsqueda dinámica por caso) ---
 CONTINGENCIAS_OBJETIVO = [
-    {
-        'tipo': 'gen',
-        'busqueda': 'Solar Titan',   # substring a buscar en el nombre del generador
-        'slug': 'solar_titan',       # usado en el nombre de archivo
-    },
-    {
-        'tipo': 'load',
-        'numero': 2,                 # número de alimentador/carga (según `contingencias`)
-        'etiqueta': 'Salida Alimentador 2',
-        'slug': 'alimentador_2',
-    },
+    {'tipo': 'gen',  'busqueda': 'Solar Titan', 'slug': 'solar_titan'},
+    {'tipo': 'load', 'numero': 2, 'etiqueta': 'Salida Alimentador 2', 'slug': 'alimentador_2'},
 ]
 
-ordenar_escenarios = False  # True: ordena por inyección renovable total (suma de los 3 WTG)
+# --- Ramas a incluir en los gráficos de flujos (todo lo demás se filtra) ---
+# Nota: se corrigió una coma faltante y una entrada (5,6)->(5,6) duplicada,
+# que ahora es (5,6)->(6,5) para mantener ambos sentidos como el resto.
+descripciones_flujos = {
+    # Líneas
+    (4, 5): "(66 kV)", (5, 4): "(66 kV)",
+    (7, 8): "(PE)", (8, 7): "(PE)",
+    (8, 9): "(PE)", (9, 8): "(PE)",
+    (9, 10): "(PE)", (10, 9): "(PE)",
+    # Trafos
+    (1, 2): "(T6)", (2, 1): "(T6)",
+    (1, 3): "(T2)", (3, 1): "(T2)",
+    (1, 7): "(T1)", (7, 1): "(T1)",
+    (1, 4): "(T5 y T7)", (4, 1): "(T5 y T7)",
+    (5, 6): "(T7)", (6, 5): "(T7)",
+}
 
 # ============================================================================
 # 2. PALETA DE COLORES
 # ============================================================================
-# Térmicas / otras unidades no-ERV (sin cambios respecto al original).
-# Se cicla con % si hubiese más generadores de este tipo que colores definidos.
+
+# Térmicas / otras unidades no-ERV (sin cambios). Se cicla con % si faltan colores.
 colores_termicos = ['#7C4B3A', '#7D6642', '#B8643B', '#B78D43', '#dd8452', '#C44E52']
 
-# WTG eólicos (verdes) — 3 variantes, una por unidad eólica
-colores_wtg = ['#55a868', '#3C8F5C', '#8FCB9B']
+# WTG eólicos: tono OSCURO base por unidad (la parte clara se deriva con lighten_color)
+colores_wtg = ['#2E7D32', '#3C8F5C', '#6FAE8B']
 
-# Líneas y transformadores (azules y morados alternados).
-# Agregar más entradas a esta lista si la red tiene más ramas que colores.
-colores_lineas_pool = [
-    '#4C72B0', '#8172B3', '#6A8FC4', '#A084CA',
-    '#2E5090', '#5E3C99', '#7B9CD4', '#9B6FB5',
+# Líneas/transformadores: paleta ampliada y diversa (antes solo azul/morado dificultaba
+# la lectura con muchas ramas). Se cicla con % si faltan colores.
+colores_flujos_pool = [
+    '#4C72B0', '#8172B3', '#36A2A6', '#C2548F', '#5B5EA6',
+    '#5C7A89', '#8E4585', '#4F6D7A', '#A0527C', '#3E5C76',
 ]
 
+# Paleta específica del gráfico PE (reserva / vertimiento)
+VERDE_PE = '#2E7D32'
+NARANJA_PE = '#E08214'
+AZUL_PE = '#1F77B4'
+AMARILLO_PE = '#FDD835'
+
+def lighten_color(hex_color, factor=0.55):
+    """Mezcla un color hex con blanco; factor=0 -> sin cambio, 1 -> blanco."""
+    hex_color = hex_color.lstrip('#')
+    r, g, b = (int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+    r = int(r + (255 - r) * factor)
+    g = int(g + (255 - g) * factor)
+    b = int(b + (255 - b) * factor)
+    return f'#{r:02x}{g:02x}{b:02x}'
+
 def color_generador(idx, idx_erv):
-    """Verde si es WTG (idx en idx_erv), color térmico en otro caso."""
     if idx in idx_erv:
         pos = list(idx_erv).index(idx)
         return colores_wtg[pos % len(colores_wtg)]
     return colores_termicos[idx % len(colores_termicos)]
 
 def color_linea(idx):
-    return colores_lineas_pool[idx % len(colores_lineas_pool)]
+    return colores_flujos_pool[idx % len(colores_flujos_pool)]
 
 # ============================================================================
 # 3. UTILIDADES
@@ -1322,7 +1335,7 @@ def guardar_figura(fig, nombre_archivo):
 
 def buscar_contingencia(vars_case, objetivo):
     """
-    Devuelve (k_idx, etiqueta) de la contingencia objetivo dentro de este caso,
+    Devuelve (k_idx, etiqueta) de la contingencia objetivo en este caso,
     o (None, None) si no existe (ej. generador no activo en este caso).
     """
     contingencias = vars_case['contingencias']
@@ -1330,8 +1343,7 @@ def buscar_contingencia(vars_case, objetivo):
 
     if objetivo['tipo'] == 'gen':
         idx_gen = next(
-            (i for i, name in enumerate(gen_names) if objetivo['busqueda'] in name),
-            None
+            (i for i, n in enumerate(gen_names) if objetivo['busqueda'] in n), None
         )
         if idx_gen is None:
             return None, None
@@ -1351,11 +1363,57 @@ def buscar_contingencia(vars_case, objetivo):
 
     return None, None
 
+def construir_eta_matrix(ng, idx_erv, eta_ordenado, gen_fuera_servicio=None):
+    """Matriz (ng, n_w) con eta solo en las filas WTG; 0 en la fila que esté fuera de servicio."""
+    eta_m = np.zeros((ng, len(eta_ordenado)))
+    for i in idx_erv:
+        if i == gen_fuera_servicio:
+            continue
+        eta_m[i, :] = eta_ordenado
+    return eta_m
+
+def dibujar_stack_despacho(ax, x_array, ancho, p_matrix, eta_matrix, ng, idx_erv,
+                            colores_gen, hatch=None):
+    """
+    Dibuja un stacked bar por elemento de x_array. Para generadores WTG, separa
+    el bloque en despachable (oscuro) + estocástico (claro) con línea punteada
+    en el límite. Devuelve el array `bottom` final (tope de cada barra).
+    """
+    bottom = np.zeros(len(x_array))
+    for i in range(ng):
+        if i in idx_erv:
+            color_dark = colores_gen[i]
+            color_light = lighten_color(color_dark, 0.55)
+
+            y_desp = p_matrix[i, :]
+            ax.bar(x_array, y_desp, ancho, bottom=bottom, color=color_dark,
+                   edgecolor='black', linewidth=0.5, hatch=hatch)
+            bottom = bottom + y_desp
+
+            y_esto = eta_matrix[i, :]
+            ax.bar(x_array, y_esto, ancho, bottom=bottom, color=color_light,
+                   edgecolor='black', linewidth=0.5, hatch=hatch)
+            for xc, b in zip(x_array, bottom):
+                ax.plot([xc - ancho/2, xc + ancho/2], [b, b], linestyle='--',
+                        color='black', linewidth=0.6, zorder=5)
+            bottom = bottom + y_esto
+        else:
+            y = p_matrix[i, :]
+            ax.bar(x_array, y, ancho, bottom=bottom, color=colores_gen[i],
+                   edgecolor='black', linewidth=0.5, hatch=hatch)
+            bottom = bottom + y
+    return bottom
+
 # ============================================================================
 # 4. GENERACIÓN DE GRÁFICOS POR CASO
 # ============================================================================
 
 if status == GRB.Status.OPTIMAL:
+
+    sort_idx = np.argsort(eta_list) if ORDENAR_POR_ETA else np.arange(n_w)
+    eta_ordenado_global = eta_list[sort_idx]
+    etiquetas_x = [f'{v:.2f}' for v in eta_ordenado_global]
+    x_pos = np.arange(n_w)
 
     casos_a_iterar = casos_ejecutar if CASOS_A_GRAFICAR == 'all' else CASOS_A_GRAFICAR
 
@@ -1370,150 +1428,171 @@ if status == GRB.Status.OPTIMAL:
         p_post_val = vars_case['p_post'].X
         f_post_val = vars_case['f_post'].X
 
-        gen_names    = vars_case['gen_names']
-        branch_from  = vars_case['branch_from']
-        branch_to    = vars_case['branch_to']
+        gen_names     = vars_case['gen_names']
+        branch_from   = vars_case['branch_from']
+        branch_to     = vars_case['branch_to']
         contingencias = vars_case['contingencias']
-        Load_bus_pre  = vars_case['Load_bus_pre']
-        Load_bus_post = vars_case['Load_bus_post']
+        FM_caso       = vars_case['FM']
 
         ng = p_pre_val.shape[0]
         nl = f_pre_val.shape[0]
-        n_w_caso = p_pre_val.shape[1]
-
         idx_erv = list(range(ng - 3, ng))  # últimos 3 = WTG (convención del modelo)
 
-        gen_labels_base = [nombre_limpio(g) for g in gen_names]
-        line_labels = [f"{int(branch_from[l])}-{int(branch_to[l])}" for l in range(nl)]
-
+        gen_labels = [nombre_limpio(g) for g in gen_names]
         colores_gen_caso = [color_generador(i, idx_erv) for i in range(ng)]
-        colores_lineas_caso = [color_linea(l) for l in range(nl)]
 
-        demanda_pre_total = sum(Load_bus_pre)
-
-        # ---- Incorporación de la parte estocástica real (eta) en los WTG ----
-        p_pre_real = p_pre_val.copy()
-        p_post_real = p_post_val.copy()
-        for w in range(n_w_caso):
-            for idx_e in idx_erv:
-                p_pre_real[idx_e, w] += eta_list[w]
-                for k_idx, (tipo, index) in enumerate(contingencias):
-                    if tipo == 'gen' and (index - 1) == idx_e:
-                        p_post_real[idx_e, k_idx, w] = 0
-                    else:
-                        p_post_real[idx_e, k_idx, w] += eta_list[w]
-
-        if ordenar_escenarios:
-            sort_idx = np.argsort(p_pre_real[idx_erv, :].sum(axis=0))
-        else:
-            sort_idx = np.arange(n_w_caso)
-
-        x_pos = np.arange(n_w_caso)
-        etiquetas_x = [f'{w+1}' for w in sort_idx]
-
-        ncol_gen = min(ng + 1, 6)
-        ncol_lineas = min(nl, 8)
+        p_pre_ord = p_pre_val[:, sort_idx]
+        f_pre_ord = f_pre_val[:, sort_idx]
 
         print(f'\nCaso {u}:')
 
         # ------------------------------------------------------------------
-        # PRE - POTENCIA
+        # 4.1 DESPACHO COMBINADO (pre + post) por contingencia objetivo
         # ------------------------------------------------------------------
-        if tipo_incluido('pre_potencia'):
-            fig, ax = plt.subplots(figsize=FIGSIZE)
-            bottom = np.zeros(n_w_caso)
-            for i in range(ng):
-                y = p_pre_real[i, sort_idx]
-                ax.bar(x_pos, y, bottom=bottom, label=gen_labels_base[i],
-                       color=colores_gen_caso[i], edgecolor='black', linewidth=0.7, width=0.6)
-                bottom += y
-            ax.axhline(y=demanda_pre_total, color='#4C72B0', linestyle='--',
-                       linewidth=1, label=f'Demanda ({demanda_pre_total:.1f} MW)')
-            ax.set_xticks(x_pos); ax.set_xticklabels(etiquetas_x)
-            ax.set_xlabel('Escenarios de incertidumbre (w)')
-            ax.set_ylabel('Potencia [MW]')
-            ax.set_title(f'Caso {u} — Despachos pre-contingencia')
-            ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.18), ncol=ncol_gen, fontsize=8)
-            ax.grid(True, axis='y', alpha=0.3)
-            plt.tight_layout()
-            guardar_figura(fig, f'caso{u}_pre_potencia.pdf')
+        if tipo_incluido('despacho'):
+            for objetivo in CONTINGENCIAS_OBJETIVO:
+                k_idx, etiqueta = buscar_contingencia(vars_case, objetivo)
+                if k_idx is None:
+                    ref = objetivo.get('busqueda', objetivo.get('numero'))
+                    print(f'  [Aviso] Contingencia "{ref}" no existe en el Caso {u}; se omite (despacho).')
+                    continue
 
-        # ------------------------------------------------------------------
-        # PRE - FLUJOS
-        # ------------------------------------------------------------------
-        if tipo_incluido('pre_flujos'):
-            fig, ax = plt.subplots(figsize=FIGSIZE)
-            ancho_barra = 0.8 / nl
-            for l in range(nl):
-                offset = (l - nl/2 + 0.5) * ancho_barra
-                ax.bar(x_pos + offset, f_pre_val[l, sort_idx], width=ancho_barra,
-                       label=line_labels[l], color=colores_lineas_caso[l],
-                       edgecolor='black', linewidth=0.5)
-            ax.axhline(0, color='black', linewidth=1)
-            ax.set_xticks(x_pos); ax.set_xticklabels(etiquetas_x)
-            ax.set_xlabel('Escenarios de incertidumbre (w)')
-            ax.set_ylabel('Flujos [MW]')
-            ax.set_title(f'Caso {u} — Flujos pre-contingencia')
-            ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.18), ncol=ncol_lineas, fontsize=7)
-            ax.grid(True, axis='y', alpha=0.3)
-            plt.tight_layout()
-            guardar_figura(fig, f'caso{u}_pre_flujos.pdf')
+                tipo_k, idx_k = contingencias[k_idx]
+                gen_fs = (idx_k - 1) if (tipo_k == 'gen' and (idx_k - 1) in idx_erv) else None
 
-        # ------------------------------------------------------------------
-        # POST - solo las contingencias objetivo
-        # ------------------------------------------------------------------
-        for objetivo in CONTINGENCIAS_OBJETIVO:
-            k_idx, etiqueta = buscar_contingencia(vars_case, objetivo)
-            if k_idx is None:
-                ref = objetivo.get('busqueda', objetivo.get('numero'))
-                print(f'  [Aviso] Contingencia "{ref}" no existe en el Caso {u}; se omite.')
-                continue
+                eta_matrix_pre  = construir_eta_matrix(ng, idx_erv, eta_ordenado_global, gen_fuera_servicio=None)
+                eta_matrix_post = construir_eta_matrix(ng, idx_erv, eta_ordenado_global, gen_fuera_servicio=gen_fs)
+                p_post_ord = p_post_val[:, k_idx, sort_idx]
 
-            tipo_k, idx_k = contingencias[k_idx]
-            nombre_k = f"Cont{k_idx+1}_{tipo_k}{idx_k}"
-
-            gen_labels_k = gen_labels_base.copy()
-            if tipo_k == 'gen':
-                gen_labels_k[idx_k - 1] = gen_labels_k[idx_k - 1] + ' (f.s.)'
-
-            demanda_post_total = sum(Load_bus_post[nombre_k])
-
-            if tipo_incluido('post_potencia'):
                 fig, ax = plt.subplots(figsize=FIGSIZE)
-                bottom = np.zeros(n_w_caso)
-                for i in range(ng):
-                    y = p_post_real[i, k_idx, sort_idx]
-                    ax.bar(x_pos, y, bottom=bottom, label=gen_labels_k[i],
-                           color=colores_gen_caso[i], edgecolor='black', linewidth=0.7, width=0.6)
-                    bottom += y
-                ax.axhline(y=demanda_post_total, color='#4C72B0', linestyle='--',
-                           linewidth=1, label=f'Demanda ({demanda_post_total:.1f} MW)')
-                ax.set_xticks(x_pos); ax.set_xticklabels(etiquetas_x)
-                ax.set_xlabel('Escenarios de incertidumbre (w)')
+                ancho = 0.32
+                x_pre = x_pos - ancho/2 - 0.02
+                x_post = x_pos + ancho/2 + 0.02
+
+                dibujar_stack_despacho(ax, x_pre, ancho, p_pre_ord, eta_matrix_pre,
+                                        ng, idx_erv, colores_gen_caso, hatch=None)
+                dibujar_stack_despacho(ax, x_post, ancho, p_post_ord, eta_matrix_post,
+                                        ng, idx_erv, colores_gen_caso, hatch='///')
+
+                ax.set_xticks(x_pos); ax.set_xticklabels(etiquetas_x, rotation=45, ha='right')
+                ax.set_xlabel('Error estocástico η [MW]')
                 ax.set_ylabel('Potencia [MW]')
-                ax.set_title(f'Caso {u} — Despachos post-contingencia ({etiqueta})')
-                ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.18), ncol=ncol_gen, fontsize=8)
-                ax.grid(True, axis='y', alpha=0.3)
-                plt.tight_layout()
-                guardar_figura(fig, f'caso{u}_post_{objetivo["slug"]}_potencia.pdf')
+                ax.set_title(f'Caso {u} — Despachos pre/post ({etiqueta})')
 
-            if tipo_incluido('post_flujos'):
-                fig, ax = plt.subplots(figsize=FIGSIZE)
-                ancho_barra = 0.8 / nl
-                for l in range(nl):
-                    offset = (l - nl/2 + 0.5) * ancho_barra
-                    ax.bar(x_pos + offset, f_post_val[l, k_idx, sort_idx], width=ancho_barra,
-                           label=line_labels[l], color=colores_lineas_caso[l],
-                           edgecolor='black', linewidth=0.5)
-                ax.axhline(0, color='black', linewidth=1)
-                ax.set_xticks(x_pos); ax.set_xticklabels(etiquetas_x)
-                ax.set_xlabel('Escenarios de incertidumbre (w)')
-                ax.set_ylabel('Flujos [MW]')
-                ax.set_title(f'Caso {u} — Flujos post-contingencia ({etiqueta})')
-                ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.18), ncol=ncol_lineas, fontsize=7)
+                handles = [Patch(facecolor=colores_gen_caso[i], edgecolor='black', label=gen_labels[i])
+                           for i in range(ng) if i not in idx_erv]
+                handles += [Patch(facecolor=colores_wtg[0], edgecolor='black', label='WTG (desp.)'),
+                            Patch(facecolor=lighten_color(colores_wtg[0], 0.55), edgecolor='black', label='WTG (estoc.)')]
+                handles += [Patch(facecolor='white', edgecolor='black', label='Pre'),
+                            Patch(facecolor='white', edgecolor='black', hatch='///', label='Post')]
+                ax.legend(handles=handles, loc='upper center', bbox_to_anchor=(0.5, -0.30), ncol=4, fontsize=7)
                 ax.grid(True, axis='y', alpha=0.3)
                 plt.tight_layout()
-                guardar_figura(fig, f'caso{u}_post_{objetivo["slug"]}_flujos.pdf')
+                guardar_figura(fig, f'caso{u}_despacho_{objetivo["slug"]}.pdf')
+
+        # ------------------------------------------------------------------
+        # 4.2 FLUJOS COMBINADOS (cargabilidad %, pre + post) por contingencia
+        # ------------------------------------------------------------------
+        if tipo_incluido('flujos'):
+            idx_mostrar = [
+                l for l in range(nl)
+                if (int(branch_from[l]), int(branch_to[l])) in descripciones_flujos
+                or (int(branch_to[l]), int(branch_from[l])) in descripciones_flujos
+            ]
+            if not idx_mostrar:
+                print(f'  [Aviso] Ninguna rama del Caso {u} coincide con descripciones_flujos; se omiten flujos.')
+            else:
+                line_labels = []
+                for l in idx_mostrar:
+                    bf, bt = int(branch_from[l]), int(branch_to[l])
+                    desc = descripciones_flujos.get((bf, bt), descripciones_flujos.get((bt, bf), ''))
+                    line_labels.append(f'{bf}-{bt} {desc}'.strip())
+
+                for objetivo in CONTINGENCIAS_OBJETIVO:
+                    k_idx, etiqueta = buscar_contingencia(vars_case, objetivo)
+                    if k_idx is None:
+                        ref = objetivo.get('busqueda', objetivo.get('numero'))
+                        print(f'  [Aviso] Contingencia "{ref}" no existe en el Caso {u}; se omite (flujos).')
+                        continue
+
+                    fig, ax = plt.subplots(figsize=FIGSIZE)
+                    n_l = len(idx_mostrar)
+                    ancho_grupo = 0.85
+                    ancho_barra = ancho_grupo / (n_l * 2)
+
+                    for j, l in enumerate(idx_mostrar):
+                        color_pre = color_linea(j)
+                        color_post = lighten_color(color_pre, 0.5)
+                        off_pre  = -ancho_grupo/2 + (2*j + 0.5) * ancho_barra
+                        off_post = -ancho_grupo/2 + (2*j + 1.5) * ancho_barra
+                        fm = FM_caso[l]
+                        carg_pre  = np.abs(f_pre_ord[l, :]) / fm * 100
+                        carg_post = np.abs(f_post_val[l, k_idx, sort_idx]) / fm * 100
+                        ax.bar(x_pos + off_pre, carg_pre, ancho_barra, color=color_pre,
+                               edgecolor='black', linewidth=0.4)
+                        ax.bar(x_pos + off_post, carg_post, ancho_barra, color=color_post,
+                               edgecolor='black', linewidth=0.4)
+
+                    ax.set_xticks(x_pos); ax.set_xticklabels(etiquetas_x, rotation=45, ha='right')
+                    ax.set_xlabel('Error estocástico η [MW]')
+                    ax.set_ylabel('Cargabilidad [%]')
+                    ax.set_title(f'Caso {u} — Cargabilidad de ramas, pre/post ({etiqueta})')
+
+                    handles = [Patch(facecolor=color_linea(j), edgecolor='black', label=line_labels[j])
+                               for j in range(n_l)]
+                    handles += [Patch(facecolor='dimgray', edgecolor='black', label='Pre (oscuro)'),
+                                Patch(facecolor=lighten_color('#444444', 0.55), edgecolor='black', label='Post (claro)')]
+                    ax.legend(handles=handles, loc='upper center', bbox_to_anchor=(0.5, -0.34), ncol=4, fontsize=7)
+                    ax.grid(True, axis='y', alpha=0.3)
+                    plt.tight_layout()
+                    guardar_figura(fig, f'caso{u}_flujos_{objetivo["slug"]}.pdf')
+
+        # ------------------------------------------------------------------
+        # 4.3 PARQUE EÓLICO (PE): reserva y vertimiento — solo precontingencia
+        # ------------------------------------------------------------------
+        if tipo_incluido('pe'):
+            # r_up es por caso pero no se guarda en vars_case; se reconstruye desde
+            # r_up_g (global) con el mismo mapeo que ya usa el modelo (dicc_gen).
+            idx_activos_caso = [dicc_gen[name] for name in gen_names]
+            r_up_caso = r_up_g.X[idx_activos_caso]
+
+            n_erv = len(idx_erv)
+            p_pre_total  = p_pre_ord[idx_erv, :].sum(axis=0)
+            eta_total    = n_erv * eta_ordenado_global
+            r_up_total   = r_up_caso[idx_erv].sum()
+            p_fore_total = n_erv * p_fore
+            p_VUL_total  = n_erv * p_VUL
+            vertimiento  = np.maximum(0.0, p_VUL_total - p_pre_total - r_up_total)
+
+            fig, ax = plt.subplots(figsize=FIGSIZE)
+            ancho = 0.5
+            bottom = np.zeros(n_w)
+            ax.bar(x_pos, p_pre_total, ancho, bottom=bottom, color=VERDE_PE,
+                   edgecolor='black', linewidth=0.5, label='Despachable (Σ p_pre)')
+            bottom = bottom + p_pre_total
+            ax.bar(x_pos, eta_total, ancho, bottom=bottom, color=NARANJA_PE,
+                   edgecolor='black', linewidth=0.5, label='Estocástico (Σ η)')
+            bottom = bottom + eta_total
+            r_up_arr = np.full(n_w, r_up_total)
+            ax.bar(x_pos, r_up_arr, ancho, bottom=bottom, color=AZUL_PE,
+                   edgecolor='black', linewidth=0.5, label='Reserva de subida (Σ r_up)')
+            bottom = bottom + r_up_arr
+            ax.bar(x_pos, vertimiento, ancho, bottom=bottom, color=AMARILLO_PE,
+                   edgecolor='black', linewidth=0.5, label='Vertimiento no utilizable')
+
+            ax.axhline(p_fore_total, color='black', linestyle='--', linewidth=1.2,
+                       label=f'P_fore total = {p_fore_total:.2f} MW')
+            ax.axhline(p_VUL_total, color='dimgray', linestyle=':', linewidth=1.2,
+                       label=f'P_VUL total = {p_VUL_total:.2f} MW')
+
+            ax.set_xticks(x_pos); ax.set_xticklabels(etiquetas_x, rotation=45, ha='right')
+            ax.set_xlabel('Error estocástico η [MW]')
+            ax.set_ylabel('Potencia [MW]')
+            ax.set_title(f'Caso {u} — Parque Eólico (PE): reserva y vertimiento (pre-contingencia)')
+            ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.28), ncol=2, fontsize=8)
+            ax.grid(True, axis='y', alpha=0.3)
+            plt.tight_layout()
+            guardar_figura(fig, f'caso{u}_pe_reserva.pdf')
 
     print(f'\nTotal: {contador_figuras} gráficos exportados en {os.path.abspath(CARPETA_SALIDA)}')
 
