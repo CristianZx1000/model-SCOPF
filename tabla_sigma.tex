@@ -1,0 +1,177 @@
+\begin{frame}{Variación de desviación estándar}
+\footnotesize
+    \begin{table}[H]
+		\renewcommand{\arraystretch}{1.3}
+		\centering
+		\caption{Variación de desviación estándar.}
+		\label{tab:comp_sigma}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+			\hline 
+			$\alpha$ & $\sigma$ & $\zeta$ & $Cto^{tot}$& $Cto^{pre}$ & $Cto^{post}$ & $Cto^{res}$ & $Cto^{RUp}$ & $Cto^{RDn}$ & $R^{Up}$ & $R^{Dn}$\\
+			\hline
+			0,1  &  0,34  & 1,02  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+			0,05 &  0,17  & 0,51  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+			0,01 &  0,034 & 0,102 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+			0    &  0     & 0     & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+			\hline
+		\end{tabular}
+	\end{table}
+\end{frame}
+
+\begin{frame}{}
+\begin{itemize}
+    \item $\alpha = 0,1$
+\end{itemize}
+\footnotesize
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\caption{Resumen de costos y reservas de generadores --- Caso 2, $\varepsilon=-0,04$ MW, $\eta=0,98$ MW}
+	\label{tab:costos_reservas}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
+		\hline
+		\multicolumn{2}{|c|}{Costo total del sistema} & 2.803,09 \\
+		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 408,97 \\
+		\multicolumn{2}{|c|}{Costo de reserva} & 170,92 \\
+		\multicolumn{2}{|c|}{Costo de reserva Up} & 151,2 \\
+		\multicolumn{2}{|c|}{Costo de reserva Dn} & 19,72 \\
+		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 2.223,2 \\
+		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,38 MW \\
+		\hline \hline
+		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
+		\hline
+		Unidad Nº 4 Solar Mars & 55,6 & 8,24 \\
+		Unidad Nº 7 Solar Titan & 66,67 & 0 \\
+		Unidad Nº 9 Solar Titan & 9,56 & 0 \\
+		WTG1 & 17,76 & 51,23 \\
+		WTG2 & 17,76 & 51,23 \\
+		WTG3 & 17,76 & 51,23 \\
+		\hline
+		\textbf{Reserva total PE} & \textbf{17,76} & \textbf{51,23} \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{}
+\begin{itemize}
+    \item $\alpha = 0,05$
+\end{itemize}
+\footnotesize
+
+    % ===== TABLA 1: Costos esperados y reservas =====
+    \begin{table}[H]
+    	\renewcommand{\arraystretch}{1.3}
+    	\centering
+    	\caption{Resumen de costos y reservas de generadores}
+    	\label{tab:costos_reservas}
+    	\begin{tabular}{|c|c|c|}
+    		\hline
+    		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
+    		\hline
+    		\multicolumn{2}{|c|}{Costo total del sistema} & 1.907,25 \\
+    		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 380,41 \\
+    		\multicolumn{2}{|c|}{Costo de reserva} & 162,35 \\
+    		\multicolumn{2}{|c|}{Costo de reserva Up} & 151,26 \\
+    		\multicolumn{2}{|c|}{Costo de reserva Dn} & 11,09 \\
+    		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.364,49 \\
+    		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+    		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 2,89 MW \\
+    		\hline \hline
+    		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
+    		\hline
+    		Unidad Nº 4 Solar Mars & 50 & 0 \\
+    		Unidad Nº 7 Solar Titan & 66,67 & 0 \\
+    		Unidad Nº 9 Solar Titan & 19,57 & 0 \\
+    		WTG1 & 0 & 73,77 \\
+    		WTG2 & 0 & 73,77 \\
+    		WTG3 & 0 & 32,95 \\
+    		\hline
+    		\textbf{Reserva total PE} & \textbf{0} & \textbf{60,16} \\
+    		\hline
+    	\end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{}
+\begin{itemize}
+    \item $\alpha = 0,01$
+\end{itemize}
+\footnotesize
+
+    \begin{table}[H]
+    	\renewcommand{\arraystretch}{1.3}
+    	\centering
+    	\caption{Resumen de costos y reservas de generadores}
+    	\label{tab:costos_reservas}
+    	\begin{tabular}{|c|c|c|}
+    		\hline
+    		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
+    		\hline
+    		\multicolumn{2}{|c|}{Costo total del sistema} & 1.870,34 \\
+    		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 379,14 \\
+    		\multicolumn{2}{|c|}{Costo de reserva} & 162,33 \\
+    		\multicolumn{2}{|c|}{Costo de reserva Up} & 151,26 \\
+    		\multicolumn{2}{|c|}{Costo de reserva Dn} & 11,08 \\
+    		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.328,87 \\
+    		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+    		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 3,3 MW \\
+    		\hline \hline
+    		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
+    		\hline
+    		Unidad Nº 4 Solar Mars & 50 & 0 \\
+    		Unidad Nº 7 Solar Titan & 66,67 & 0 \\
+    		Unidad Nº 9 Solar Titan & 19,57 & 0 \\
+    		WTG1 & 0 & 85,59 \\
+    		WTG2 & 0 & 85,59 \\
+    		WTG3 & 0 & 9,02 \\
+    		\hline
+    		\textbf{Reserva total PE} & \textbf{0} & \textbf{60,07} \\
+    		\hline
+    	\end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{}
+\begin{itemize}
+    \item $\alpha = 0$
+\end{itemize}
+\footnotesize
+
+    \begin{table}[H]
+    	\renewcommand{\arraystretch}{1.3}
+    	\centering
+    	\caption{Resumen de costos y reservas de generadores}
+    	\label{tab:costos_reservas}
+    	\begin{tabular}{|c|c|c|}
+    		\hline
+    		\multicolumn{2}{|c|}{Costo} & Valor (\$/h) \\
+    		\hline
+    		\multicolumn{2}{|c|}{Costo total del sistema} & 1.879,57 \\
+    		\multicolumn{2}{|c|}{Costo pre-contingencia (esperado)} & 379,45 \\
+    		\multicolumn{2}{|c|}{Costo de reserva} & 161,86 \\
+    		\multicolumn{2}{|c|}{Costo de reserva Up} & 150,72 \\
+    		\multicolumn{2}{|c|}{Costo de reserva Dn} & 11,14 \\
+    		\multicolumn{2}{|c|}{Costo post-contingencia (esperado)} & 1.338,26 \\
+    		\multicolumn{2}{|c|}{Pron\'ostico $p^{fore}$} & 3,4 MW \\
+    		\multicolumn{2}{|c|}{L\'imite VUL $p^{VUL}$} & 3,4 MW \\
+    		\hline \hline
+    		Generador & Reserva Up (\%) & Reserva Dn (\%) \\
+    		\hline
+    		Unidad Nº 4 Solar Mars & 50,22 & 0 \\
+    		Unidad Nº 7 Solar Titan & 66,03 & 0,15 \\
+    		Unidad Nº 9 Solar Titan & 19,41 & 0 \\
+    		WTG1 & 0 & 88,55 \\
+    		WTG2 & 0 & 88,55 \\
+    		WTG3 & 0 & 1,6 \\
+    		\hline
+    		\textbf{Reserva total PE} & \textbf{0} & \textbf{59,57} \\
+    		\hline
+    	\end{tabular}
+    \end{table}
+\end{frame}
